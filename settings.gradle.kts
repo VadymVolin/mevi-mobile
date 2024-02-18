@@ -15,4 +15,7 @@ dependencyResolutionManagement {
 
 rootProject.name = "mevi-mobile"
 include(":app")
- 
+
+include(":data")
+include(":domain")
+include(":ui")
