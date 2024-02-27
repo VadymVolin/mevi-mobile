@@ -51,6 +51,13 @@ dependencies {
     implementation("androidx.compose.ui:ui-graphics")
     implementation("androidx.compose.ui:ui-tooling-preview")
     implementation("androidx.compose.material3:material3")
+    //Splash Api
+    implementation ("androidx.core:core-splashscreen:1.0.1")
+    //Icons
+    implementation ("androidx.compose.material:material-icons-extended:1.6.2")
+    //Coil
+    implementation("io.coil-kt:coil-compose:2.6.0")
+
     implementation(project(":domain"))
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
@@ -59,6 +66,5 @@ dependencies {
     androidTestImplementation("androidx.compose.ui:ui-test-junit4")
     debugImplementation("androidx.compose.ui:ui-tooling")
     debugImplementation("androidx.compose.ui:ui-test-manifest")
-    //Splash Api
-    implementation ("androidx.core:core-splashscreen:1.0.1")
+
 }
