@@ -1,9 +1,9 @@
 package com.mevi.common.chain
 
-import com.mevi.common.chain.model.ChainNode
+import com.mevi.common.chain.node.ChainNode
 import java.util.LinkedList
 
-class ChainHandler(nodes: Array<ChainNode>) {
+abstract class ChainHandler(nodes: Array<ChainNode>) {
 
     private val chainNodes: LinkedList<ChainNode> = LinkedList<ChainNode>()
 
@@ -20,6 +20,6 @@ class ChainHandler(nodes: Array<ChainNode>) {
     }
 
     fun execute() {
-
+        chainNodes.takeIf { it.isNotEmpty() }?.get(0)?.execute()
     }
 }
