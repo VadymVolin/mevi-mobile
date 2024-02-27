@@ -36,12 +36,12 @@ abstract class ChainNode {
      * when the chain completes successfully
      * @see complete
      */
-    fun onComplete() = Unit
+    open fun onComplete() = Unit
 
     /**
      * Optional callback method will be called
      * when the chain completes unsuccessfully
      * @see fail
      */
-    fun onFail() = Unit
+    open fun onFail() = Unit
 }
