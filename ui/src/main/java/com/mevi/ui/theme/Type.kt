@@ -23,23 +23,6 @@ val Inter = FontFamily(
         Font(resId = R.font.inter_semibold, weight = FontWeight.SemiBold),
     )
 )
-//M2        M3
-
-//h1	    displayLarge
-//h2	    displayMedium
-//h3	    displaySmall
-//N/A	    headlineLarge
-//h4	    headlineMedium
-//h5	    headlineSmall
-//h6	    titleLarge
-//subtitle1	titleMedium
-//subtitle2	titleSmall
-//body1	    bodyLarge
-//body2	    bodyMedium
-//caption	bodySmall
-//button	labelLarge
-//N/A	    labelMedium
-//overline	labelSmall
 
 val Typography = Typography(
 
