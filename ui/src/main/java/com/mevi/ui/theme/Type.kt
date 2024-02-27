@@ -2,33 +2,144 @@ package com.mevi.ui.theme
 
 import androidx.compose.material3.Typography
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
+import com.mevi.ui.R
 
-// Set of Material typography styles to start with
-val Typography = Typography(
-    bodyLarge = TextStyle(
-        fontFamily = FontFamily.Default,
-        fontWeight = FontWeight.Normal,
-        fontSize = 16.sp,
-        lineHeight = 24.sp,
-        letterSpacing = 0.5.sp
+
+val Poppins = FontFamily(
+    fonts = listOf(
+        Font(resId = R.font.poppins_regular, weight = FontWeight.Normal),
+        Font(resId = R.font.poppins_medium, weight = FontWeight.Medium),
     )
-    /* Other default text styles to override
-    titleLarge = TextStyle(
-        fontFamily = FontFamily.Default,
+)
+val Inter = FontFamily(
+    fonts = listOf(
+        Font(resId = R.font.inter_regular, weight = FontWeight.Normal),
+        Font(resId = R.font.inter_light, weight = FontWeight.Light),
+        Font(resId = R.font.inter_medium, weight = FontWeight.Medium),
+        Font(resId = R.font.inter_semibold, weight = FontWeight.SemiBold),
+    )
+)
+//M2        M3
+
+//h1	    displayLarge
+//h2	    displayMedium
+//h3	    displaySmall
+//N/A	    headlineLarge
+//h4	    headlineMedium
+//h5	    headlineSmall
+//h6	    titleLarge
+//subtitle1	titleMedium
+//subtitle2	titleSmall
+//body1	    bodyLarge
+//body2	    bodyMedium
+//caption	bodySmall
+//button	labelLarge
+//N/A	    labelMedium
+//overline	labelSmall
+
+val Typography = Typography(
+
+    displayLarge = TextStyle(
+        //Headline1
+        fontSize = 92.sp,
+        fontFamily = Inter,
         fontWeight = FontWeight.Normal,
-        fontSize = 22.sp,
-        lineHeight = 28.sp,
-        letterSpacing = 0.sp
+        lineHeight = 112.sp,
+        letterSpacing = (-1.5).sp
+    ),
+    displayMedium = TextStyle(
+        //Headline2
+        fontSize = 58.sp,
+        fontFamily = Inter,
+        fontWeight = FontWeight.Normal,
+        letterSpacing = (-0.5).sp
+    ),
+    displaySmall = TextStyle(
+        //Headline3
+        fontSize = 48.sp,
+        fontFamily = Inter,
+        fontWeight = FontWeight.Normal,
+    ),
+    headlineMedium = TextStyle(
+        //Headline4
+        fontSize = 32.sp,
+        fontFamily = Inter,
+        fontWeight = FontWeight.Normal,
+        lineHeight = 40.sp,
+        letterSpacing = (0.25).sp
+    ),
+    headlineSmall = TextStyle(
+        //Headline5
+        fontSize = 24.sp,
+        fontFamily = Inter,
+        fontWeight = FontWeight.Normal,
+        lineHeight = 30.sp,
+    ),
+    titleLarge = TextStyle(
+        //Headline6
+        fontSize = 20.sp,
+        fontFamily = Inter,
+        fontWeight = FontWeight.Normal,
+        letterSpacing = (0.15).sp
+    ),
+    titleMedium = TextStyle(
+        //subtitle1
+        fontSize = 16.sp,
+        fontFamily = Inter,
+        fontWeight = FontWeight.Normal,
+        lineHeight = 24.sp,
+        letterSpacing = (0.15).sp
+
+    ),
+    titleSmall = TextStyle(
+        //subtitle2
+        fontSize = 14.sp,
+        fontFamily = Inter,
+        fontWeight = FontWeight.Normal,
+        lineHeight = 18.sp,
+        letterSpacing = (0.1).sp
+
+    ),
+    bodyLarge = TextStyle(
+        //body1
+        fontSize = 16.sp,
+        fontFamily = Inter,
+        fontWeight = FontWeight.Normal,
+        lineHeight = 24.sp,
+        letterSpacing = (0.5).sp
+    ),
+    bodyMedium = TextStyle(
+        //body2
+        fontSize = 14.sp,
+        fontFamily = Inter,
+        fontWeight = FontWeight.Normal,
+        lineHeight = 18.sp,
+        letterSpacing = (0.25).sp
+    ),
+    bodySmall = TextStyle(
+        //caption
+        fontSize = 12.sp,
+        fontFamily = Inter,
+        fontWeight = FontWeight.Normal,
+        lineHeight = 16.sp,
+        letterSpacing = (0.4).sp
+    ),
+    labelLarge = TextStyle(
+        //button
+        fontSize = 16.sp,
+        fontFamily = Inter,
+        fontWeight = FontWeight.Normal,
+        lineHeight = 24.sp,
     ),
     labelSmall = TextStyle(
-        fontFamily = FontFamily.Default,
-        fontWeight = FontWeight.Medium,
-        fontSize = 11.sp,
-        lineHeight = 16.sp,
-        letterSpacing = 0.5.sp
-    )
-    */
+        //overline
+        fontSize = 10.sp,
+        fontFamily = Inter,
+        fontWeight = FontWeight.Normal,
+        letterSpacing = (1.5).sp
+    ),
 )
