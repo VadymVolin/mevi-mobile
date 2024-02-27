@@ -3,6 +3,13 @@ package com.mevi.common.chain
 import com.mevi.common.chain.node.ChainNode
 import java.util.LinkedList
 
+/**
+ * Base class for chain handlers
+ * @see ChainNode
+ *
+ * @author Vadym Volin
+ * @since 2/27/24
+ */
 abstract class ChainHandler(nodes: Array<ChainNode>) {
 
     private val chainNodes: LinkedList<ChainNode> = LinkedList<ChainNode>()
@@ -19,6 +26,9 @@ abstract class ChainHandler(nodes: Array<ChainNode>) {
         }
     }
 
+    /**
+     * Starts executing chain nodes
+     */
     fun execute() {
         chainNodes.takeIf { it.isNotEmpty() }?.get(0)?.execute()
     }
