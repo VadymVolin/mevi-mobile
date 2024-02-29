@@ -12,7 +12,7 @@ import com.mevi.common.chain.node.ChainNode
  */
 class CheckInternetNode(private val activity: MainActivity) : ChainNode() {
     override fun execute() {
-        if (activity.networkManager?.checkInternetConnection() == true) {
+        if (activity.networkManager.checkInternetConnection()) {
             Toast.makeText(activity, "CheckInternetNode has been started and internet is available", Toast.LENGTH_SHORT).show()
             complete()
         } else {

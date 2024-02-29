@@ -1,7 +1,5 @@
 package com.mevi
 
-import android.content.Context
-import android.net.ConnectivityManager
 import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.ComponentActivity
@@ -16,10 +14,11 @@ import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import com.mevi.ui.internet.NetworkManager
 import com.mevi.ui.startup.standard.StartupChainHandler
 import com.mevi.ui.theme.MeviTheme
+import org.koin.android.ext.android.inject
 
 class MainActivity : ComponentActivity() {
 
-    var networkManager: NetworkManager? = null
+    val networkManager: NetworkManager by inject()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -33,7 +32,6 @@ class MainActivity : ComponentActivity() {
                 }
             }
         }
-        networkManager = NetworkManager(getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager)
     }
 
     override fun onStart() {
@@ -48,11 +46,11 @@ class MainActivity : ComponentActivity() {
     }
 
     private fun initializeNetworkManager() {
-        networkManager?.registerNetworkCallbacks(::onInternetAvailable, ::onInternetUnavailable)
+        networkManager.registerNetworkCallbacks(::onInternetAvailable, ::onInternetUnavailable)
     }
 
     private fun releaseNetworkManager() {
-        networkManager?.unregisterNetworkCallbacks()
+        networkManager.unregisterNetworkCallbacks()
     }
 
     private fun onInternetAvailable() {

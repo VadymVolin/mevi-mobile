@@ -1,5 +1,6 @@
 package com.mevi.ui.internet
 
+import android.content.Context
 import android.net.ConnectivityManager
 import android.net.Network
 import android.net.NetworkInfo
@@ -10,7 +11,9 @@ import android.net.NetworkInfo
  * @author Vadym Volin
  * @since 2/27/24
  */
-class NetworkManager(private val connectivityManager: ConnectivityManager) {
+class NetworkManager(context: Context) {
+
+    private val connectivityManager: ConnectivityManager = context.getSystemService(ConnectivityManager::class.java)
 
     private var networkCallback: ConnectivityManager.NetworkCallback? = null
 
