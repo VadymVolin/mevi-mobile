@@ -4,13 +4,10 @@ import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
+import com.mevi.ui.MainContainerLayout
 import com.mevi.ui.internet.NetworkManager
 import com.mevi.ui.startup.standard.StartupChainHandler
 import com.mevi.ui.theme.MeviTheme
@@ -25,11 +22,7 @@ class MainActivity : ComponentActivity() {
         installSplashScreen()
         setContent {
             MeviTheme {
-                Surface(
-                    modifier = Modifier.fillMaxSize(),
-                    color = MaterialTheme.colorScheme.background
-                ) {
-                }
+                MainContainerLayout()
             }
         }
     }
@@ -66,5 +59,6 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun GreetingPreview() {
     MeviTheme {
+        MainContainerLayout()
     }
 }
