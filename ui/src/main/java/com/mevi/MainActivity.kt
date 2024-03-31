@@ -7,11 +7,14 @@ import androidx.activity.compose.setContent
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
+import androidx.navigation.compose.rememberNavController
+import com.mevi.common.translations.TextMatcher
 import com.mevi.ui.MainContainerLayout
 import com.mevi.ui.internet.NetworkManager
 import com.mevi.ui.startup.standard.StartupChainHandler
 import com.mevi.ui.theme.MeviTheme
 import org.koin.android.ext.android.inject
+import java.util.Locale
 
 class MainActivity : ComponentActivity() {
 
@@ -22,7 +25,7 @@ class MainActivity : ComponentActivity() {
         installSplashScreen()
         setContent {
             MeviTheme {
-                MainContainerLayout()
+                MainContainerLayout(navHostController = rememberNavController(), TextMatcher(Locale.US, emptyMap()))
             }
         }
     }
@@ -59,6 +62,6 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun GreetingPreview() {
     MeviTheme {
-        MainContainerLayout()
+        MainContainerLayout(navHostController = rememberNavController(), TextMatcher(Locale.US, emptyMap()))
     }
 }
