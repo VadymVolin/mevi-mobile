@@ -1,6 +1,7 @@
 package com.mevi.di
 
 import com.mevi.ui.internet.NetworkManager
+import com.mevi.ui.navigation.NavigationComponent
 import org.koin.android.ext.koin.androidContext
 import org.koin.dsl.module
 
@@ -14,4 +15,5 @@ import org.koin.dsl.module
  */
 val uiModule = module {
     single { NetworkManager(androidContext()) }
+    single { NavigationComponent(androidContext(), rememberNavCon) }
 }

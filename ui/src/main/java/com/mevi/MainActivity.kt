@@ -11,6 +11,7 @@ import androidx.navigation.compose.rememberNavController
 import com.mevi.common.translations.TextMatcher
 import com.mevi.ui.MainContainerLayout
 import com.mevi.ui.internet.NetworkManager
+import com.mevi.ui.navigation.NavigationComponent
 import com.mevi.ui.startup.standard.StartupChainHandler
 import com.mevi.ui.theme.MeviTheme
 import org.koin.android.ext.android.inject
@@ -19,13 +20,15 @@ import java.util.Locale
 class MainActivity : ComponentActivity() {
 
     val networkManager: NetworkManager by inject()
+    val navigationComponent: NavigationComponent by inject()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         installSplashScreen()
         setContent {
             MeviTheme {
-                MainContainerLayout(navHostController = rememberNavController(), TextMatcher(Locale.US, emptyMap()))
+                initializeComposables()
+                MainContainerLayout(navigationComponent, TextMatcher(Locale.US, emptyMap()))
             }
         }
     }
@@ -55,6 +58,11 @@ class MainActivity : ComponentActivity() {
 
     private fun onInternetUnavailable() {
         Toast.makeText(this, "INTERNET has been lost", Toast.LENGTH_SHORT).show()
+    }
+
+    @Composable
+    private fun initializeComposables() {
+        navigationComponent.initialize(rememberNavController(), rememberNavController(), rememberNavController(), rememberNavController())
     }
 }
 

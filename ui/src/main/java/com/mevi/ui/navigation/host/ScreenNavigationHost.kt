@@ -1,19 +1,19 @@
-package com.mevi.ui.navigation
+package com.mevi.ui.navigation.host
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import androidx.navigation.compose.rememberNavController
 import com.mevi.ui.account.AccountScreen
 import com.mevi.ui.call.RandomCallScreen
 import com.mevi.ui.chats.ChatsScreen
+import com.mevi.ui.navigation.NavigationRoute
 
 @Composable
-fun BottomNavigationBarHost(
+fun ScreenNavigationHost(
     modifier: Modifier = Modifier,
-    navController: NavHostController = rememberNavController()
+    navController: NavHostController
 ) = NavHost(
     navController = navController,
     startDestination = NavigationRoute.ROUTE_CHATS.route,

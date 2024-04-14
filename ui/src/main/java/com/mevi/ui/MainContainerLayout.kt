@@ -1,7 +1,6 @@
 package com.mevi.ui
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.WindowInsetsSides
 import androidx.compose.foundation.layout.consumeWindowInsets
@@ -12,35 +11,39 @@ import androidx.compose.foundation.layout.safeDrawing
 import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.navigation.NavHostController
-import androidx.navigation.compose.rememberNavController
 import com.mevi.common.translations.TextMatcher
 import com.mevi.ui.components.BottomNavigationBar
-import com.mevi.ui.navigation.BottomNavigationBarHost
+import com.mevi.ui.navigation.NavigationComponent
+import com.mevi.ui.navigation.host.DialogNavigationHost
+import com.mevi.ui.navigation.host.ScreenNavigationHost
 
 @Composable
 fun MainContainerLayout(
-    navHostController: NavHostController = rememberNavController(),
+    navHostController: NavigationComponent,
     textMatcher: TextMatcher
 ) {
     val modifier = Modifier.fillMaxSize()
-    Scaffold(
-        modifier = modifier.background(MaterialTheme.colorScheme.background),
-        bottomBar = {
-            BottomNavigationBar(navigationController = navHostController, textMatcher = textMatcher)
-        }
-    ) {
-        Box(
-            modifier = modifier
-                .padding(it)
-                .consumeWindowInsets(it)
-                .windowInsetsPadding(
-                    WindowInsets.safeDrawing.only(WindowInsetsSides.Horizontal),
-                )
+    Surface (modifier = modifier) {
+        // main screen container
+        Scaffold(
+            modifier = modifier.background(MaterialTheme.colorScheme.background),
+            bottomBar = {
+                BottomNavigationBar(navigationController = navHostController, textMatcher = textMatcher)
+            }
         ) {
-            BottomNavigationBarHost(modifier = modifier, navController = navHostController)
+            ScreenNavigationHost(
+                modifier = modifier
+                    .padding(it)
+                    .consumeWindowInsets(it)
+                    .windowInsetsPadding(
+                        WindowInsets.safeDrawing.only(WindowInsetsSides.Horizontal),
+                    ), navController = navHostController
+            )
         }
+        DialogNavigationHost(navController = )
     }
+
 }
