@@ -15,20 +15,21 @@ import com.mevi.ui.navigation.NavigationComponent
 import com.mevi.ui.startup.standard.StartupChainHandler
 import com.mevi.ui.theme.MeviTheme
 import org.koin.android.ext.android.inject
-import java.util.Locale
+import org.koin.androidx.compose.get
 
 class MainActivity : ComponentActivity() {
 
     val networkManager: NetworkManager by inject()
-    val navigationComponent: NavigationComponent by inject()
+    private val textMatcher: TextMatcher by inject()
+    private val navigationComponent: NavigationComponent by inject()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         installSplashScreen()
         setContent {
             MeviTheme {
-                initializeComposables()
-                MainContainerLayout(navigationComponent, TextMatcher(Locale.US, emptyMap()))
+                InitializeComposables()
+                MainContainerLayout(navigationComponent, textMatcher)
             }
         }
     }
@@ -61,15 +62,18 @@ class MainActivity : ComponentActivity() {
     }
 
     @Composable
-    private fun initializeComposables() {
+    private fun InitializeComposables() {
         navigationComponent.initialize(rememberNavController(), rememberNavController(), rememberNavController(), rememberNavController())
     }
 }
 
 @Preview(showBackground = true)
 @Composable
-fun GreetingPreview() {
+fun GreetingPreview(
+    navigationComponent: NavigationComponent = get<NavigationComponent>(),
+    textMatcher: TextMatcher = get<TextMatcher>()
+) {
     MeviTheme {
-        MainContainerLayout(navHostController = rememberNavController(), TextMatcher(Locale.US, emptyMap()))
+        MainContainerLayout(navigationComponent, textMatcher)
     }
 }

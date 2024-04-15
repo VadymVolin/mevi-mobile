@@ -2,30 +2,16 @@ package com.mevi.ui.navigation.host
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.composable
-import com.mevi.ui.account.AccountScreen
-import com.mevi.ui.call.RandomCallScreen
-import com.mevi.ui.chats.ChatsScreen
-import com.mevi.ui.navigation.NavigationRoute
+import com.mevi.ui.navigation.NavigationComponent
 
 @Composable
 fun NotificationNavigationHost(
     modifier: Modifier = Modifier,
-    navController: NavHostController
+    navigationComponent: NavigationComponent
 ) = NavHost(
-    navController = navController,
-    startDestination = NavigationRoute.ROUTE_CHATS.route,
+    navController = navigationComponent.getNotificationNavController(),
+    startDestination = String(),
     modifier = modifier
 ) {
-    composable(NavigationRoute.ROUTE_CHATS.route) {
-        ChatsScreen()
-    }
-    composable(NavigationRoute.ROUTE_RANDOM_CALL.route) {
-        RandomCallScreen()
-    }
-    composable(NavigationRoute.ROUTE_ACCOUNT.route) {
-        AccountScreen()
-    }
 }
