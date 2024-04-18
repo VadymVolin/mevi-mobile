@@ -16,7 +16,8 @@ import com.mevi.common.translations.TextKey
  */
 enum class NavigationRoute(
     val route: String,
-    val nameKey: TextKey?
+    val nameKey: TextKey?,
+    val removeLastRoute: Boolean = false
 ) {
     // main screen routes
     ROUTE_SCREEN_CHATS("CHATS", TextKey.TEXT_CHATS_ROUTE),

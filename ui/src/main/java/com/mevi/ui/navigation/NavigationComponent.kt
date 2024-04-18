@@ -1,6 +1,7 @@
 package com.mevi.ui.navigation
 
 import android.content.Context
+import android.util.Log
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
@@ -94,6 +95,16 @@ class NavigationComponent(private val context: Context) {
         override fun getNavController(): NavHostController = navController
 
         override fun navigate(route: NavigationRoute) {
+            if (route.removeLastRoute) {
+                navController.navigateUp()
+            }
+            navController.navigate(route.route) {
+                // Avoid multiple copies of the same destination when
+                // re-selecting the same item
+                launchSingleTop = true
+                // Restore state when re-selecting a previously selected item
+                restoreState = true
+            }
         }
     }
 
@@ -101,6 +112,16 @@ class NavigationComponent(private val context: Context) {
         override fun getNavController(): NavHostController = navController
 
         override fun navigate(route: NavigationRoute) {
+            if (route.removeLastRoute) {
+                navController.navigateUp()
+            }
+            navController.navigate(route.route) {
+                // Avoid multiple copies of the same destination when
+                // re-selecting the same item
+                launchSingleTop = true
+                // Restore state when re-selecting a previously selected item
+                restoreState = true
+            }
         }
     }
 
@@ -108,6 +129,9 @@ class NavigationComponent(private val context: Context) {
         override fun getNavController(): NavHostController = navController
 
         override fun navigate(route: NavigationRoute) {
+            while (navController.popBackStack()) {
+                Log.d(TAG, "navigate: ")
+            }
         }
     }
 
