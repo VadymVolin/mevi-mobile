@@ -7,5 +7,5 @@ import com.mevi.ui.navigation.NavigationRoute
 
 @Composable
 fun AccountScreen() {
-    Text(text = NavigationRoute.ROUTE_ACCOUNT.route)
+    Text(text = NavigationRoute.ROUTE_SCREEN_ACCOUNT.route)
 }

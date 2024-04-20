@@ -1,33 +1,39 @@
 package com.mevi.ui.startup.standard.node
 
-import android.widget.Toast
-import com.mevi.MainActivity
+import android.util.Log
 import com.mevi.common.chain.node.ChainNode
+import com.mevi.ui.internet.NetworkManager
+import com.mevi.ui.navigation.NavigationComponent
+import com.mevi.ui.navigation.NavigationRoute
 
 /**
  * Checks internet connection
  *
  * @author Vadym Volin
+ * @author midnight85
+ *
  * @since 2/27/24
  */
-class CheckInternetNode(private val activity: MainActivity) : ChainNode() {
+class CheckInternetNode(
+    private val navigationComponent: NavigationComponent,
+    private val networkManager: NetworkManager
+) : ChainNode() {
+
+    companion object {
+        val TAG: String = CheckInternetNode::class.java.name
+    }
+
     override fun execute() {
-        if (activity.networkManager.checkInternetConnection()) {
-            Toast.makeText(activity, "CheckInternetNode has been started and internet is available", Toast.LENGTH_SHORT).show()
+        if (networkManager.isInternetConnectionAvailable()) {
             complete()
         } else {
-            Toast.makeText(activity, "CheckInternetNode has been started and internet is not available", Toast.LENGTH_SHORT).show()
-            fail()
+            navigationComponent.showAlert(NavigationRoute.ROUTE_ALERT_NO_INTERNET)
+            networkManager.registerNetworkCallbacks(TAG, { complete() }, null)
         }
     }
 
     override fun onComplete() {
         super.onComplete()
-        Toast.makeText(activity, "CheckInternetNode has been finished successfully", Toast.LENGTH_SHORT).show()
-    }
-
-    override fun onFail() {
-        super.onFail()
-        Toast.makeText(activity, "CheckInternetNode has been finished unsuccessfully", Toast.LENGTH_SHORT).show()
+        networkManager.unregisterNetworkCallbacks(TAG)
     }
 }

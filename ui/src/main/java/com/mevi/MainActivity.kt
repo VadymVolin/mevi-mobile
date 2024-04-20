@@ -1,43 +1,46 @@
 package com.mevi
 
 import android.os.Bundle
-import android.widget.Toast
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.navigation.compose.rememberNavController
-import com.mevi.common.translations.TextMatcher
 import com.mevi.ui.MainContainerLayout
 import com.mevi.ui.internet.NetworkManager
 import com.mevi.ui.navigation.NavigationComponent
-import com.mevi.ui.startup.standard.StartupChainHandler
+import com.mevi.ui.navigation.NavigationRoute
+import com.mevi.ui.startup.standard.OnboardingChaneHandler
 import com.mevi.ui.theme.MeviTheme
+import com.mevi.ui.translations.TextMatcher
 import org.koin.android.ext.android.inject
-import org.koin.androidx.compose.get
 
 class MainActivity : ComponentActivity() {
 
-    val networkManager: NetworkManager by inject()
+    companion object {
+        val TAG: String = MainActivity::class.java.name
+    }
+
+    private val networkManager: NetworkManager by inject()
     private val textMatcher: TextMatcher by inject()
     private val navigationComponent: NavigationComponent by inject()
+    private val onboardingChaneHandler: OnboardingChaneHandler by inject()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         installSplashScreen()
         setContent {
             MeviTheme {
-                InitializeComposables()
+                navigationComponent.initialize(rememberNavController(), rememberNavController(), rememberNavController(), rememberNavController())
+                onboardingChaneHandler.setFinalNode {
+                    initializeNetworkCallback()
+                }
                 MainContainerLayout(navigationComponent, textMatcher)
+                onboardingChaneHandler.execute()
             }
         }
-    }
-
-    override fun onStart() {
-        super.onStart()
-        StartupChainHandler(this).execute()
-        initializeNetworkManager()
     }
 
     override fun onStop() {
@@ -45,35 +48,29 @@ class MainActivity : ComponentActivity() {
         releaseNetworkManager()
     }
 
-    private fun initializeNetworkManager() {
-        networkManager.registerNetworkCallbacks(::onInternetAvailable, ::onInternetUnavailable)
+    private fun initializeNetworkCallback() {
+        networkManager.registerNetworkCallbacks(TAG, ::onInternetAvailable, ::onInternetUnavailable)
     }
 
     private fun releaseNetworkManager() {
-        networkManager.unregisterNetworkCallbacks()
+        networkManager.unregisterNetworkCallbacks(TAG)
     }
 
     private fun onInternetAvailable() {
-        Toast.makeText(this, "INTERNET is available", Toast.LENGTH_SHORT).show()
+        Log.d(TAG, "Internet connection has been restored")
     }
 
     private fun onInternetUnavailable() {
-        Toast.makeText(this, "INTERNET has been lost", Toast.LENGTH_SHORT).show()
-    }
-
-    @Composable
-    private fun InitializeComposables() {
-        navigationComponent.initialize(rememberNavController(), rememberNavController(), rememberNavController(), rememberNavController())
+        runOnUiThread {
+            Log.d(TAG, "Internet connection has been lost")
+            navigationComponent.showAlert(NavigationRoute.ROUTE_ALERT_NO_INTERNET)
+        }
     }
 }
 
 @Preview(showBackground = true)
 @Composable
-fun GreetingPreview(
-    navigationComponent: NavigationComponent = get<NavigationComponent>(),
-    textMatcher: TextMatcher = get<TextMatcher>()
-) {
+fun GreetingPreview() {
     MeviTheme {
-        MainContainerLayout(navigationComponent, textMatcher)
     }
 }

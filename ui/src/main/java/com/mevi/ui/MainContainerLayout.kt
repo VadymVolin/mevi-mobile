@@ -15,13 +15,13 @@ import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import com.mevi.common.translations.TextMatcher
 import com.mevi.ui.components.BottomNavigationBar
 import com.mevi.ui.navigation.NavigationComponent
 import com.mevi.ui.navigation.host.AlertNavigationHost
 import com.mevi.ui.navigation.host.DialogNavigationHost
 import com.mevi.ui.navigation.host.NotificationNavigationHost
 import com.mevi.ui.navigation.host.ScreenNavigationHost
+import com.mevi.ui.translations.TextMatcher
 
 @Composable
 fun MainContainerLayout(

@@ -6,5 +6,5 @@ import com.mevi.ui.navigation.NavigationRoute
 
 @Composable
 fun RandomCallScreen() {
-    Text(text = NavigationRoute.ROUTE_RANDOM_CALL.route)
+    Text(text = NavigationRoute.ROUTE_SCREEN_RANDOM_CALL.route)
 }

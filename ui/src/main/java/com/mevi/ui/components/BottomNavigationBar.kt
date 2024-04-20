@@ -13,8 +13,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.compose.currentBackStackEntryAsState
-import com.mevi.common.translations.TextKey
-import com.mevi.common.translations.TextMatcher
+import com.mevi.ui.translations.TextKey
+import com.mevi.ui.translations.TextMatcher
 import com.mevi.ui.navigation.NavigationComponent
 import com.mevi.ui.navigation.NavigationRoute
 
@@ -32,7 +32,7 @@ fun BottomNavigationBar(
         bottomRoutes.forEach { item ->
             NavigationBarItem(
                 icon = { Icon(getIconByRoute(item), contentDescription = item.route) },
-                label = { Text(textMatcher.get(item.nameKey ?: TextKey.NO_INFO)) },
+                label = { Text(textMatcher[item.nameKey ?: TextKey.NO_INFO]) },
                 selected = currentDestination?.hierarchy?.any { it.route == item.route } == true,
                 onClick = { navigationComponent.showScreen(item) }
             )

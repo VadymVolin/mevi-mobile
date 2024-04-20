@@ -6,5 +6,5 @@ import com.mevi.ui.navigation.NavigationRoute
 
 @Composable
 fun ChatsScreen() {
-    Text(text = NavigationRoute.ROUTE_CHATS.route)
+    Text(text = NavigationRoute.ROUTE_SCREEN_CHATS.route)
 }

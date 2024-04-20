@@ -1,6 +1,6 @@
 package com.mevi.ui.navigation
 
-import com.mevi.common.translations.TextKey
+import com.mevi.ui.translations.TextKey
 
 /**
  * Navigation route,
@@ -19,6 +19,7 @@ enum class NavigationRoute(
     val nameKey: TextKey?,
     val removeLastRoute: Boolean = false
 ) {
+    ROUTE_EMPTY("EMPTY", null),
     // main screen routes
     ROUTE_SCREEN_CHATS("CHATS", TextKey.TEXT_CHATS_ROUTE),
     ROUTE_SCREEN_RANDOM_CALL("RANDOM_CALL", TextKey.TEXT_RANDOM_CALL_ROUTE),
@@ -29,10 +30,10 @@ enum class NavigationRoute(
     ROUTE_DIALOG_REGISTRATION_DIALOG("REGISTRATION_DIALOG", null),
 
     // alerts routes
+    ROUTE_ALERT_NO_INTERNET("ROUTE_ALERT_NO_INTERNET", null),
     ROUTE_ALERT_BE_DISCONNECTED("BE_DISCONNECTED_ALERT", null),
 
     // notifications routes
-    ROUTE_NOTIFICATION_NO_INTERNET("NO_INTERNET_NOTIFICATION", null),
     ;
 
 }

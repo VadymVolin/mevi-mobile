@@ -3,7 +3,8 @@ package com.mevi.ui.internet
 import android.content.Context
 import android.net.ConnectivityManager
 import android.net.Network
-import android.net.NetworkInfo
+import android.net.NetworkCapabilities
+import android.util.Log
 
 /**
  * Manager to track internet connection
@@ -13,41 +14,71 @@ import android.net.NetworkInfo
  */
 class NetworkManager(context: Context) {
 
-    private val connectivityManager: ConnectivityManager = context.getSystemService(ConnectivityManager::class.java)
-
-    private var networkCallback: ConnectivityManager.NetworkCallback? = null
-
-    fun checkInternetConnection(): Boolean {
-        val activeInfo: NetworkInfo? = connectivityManager.activeNetworkInfo
-        return if (activeInfo?.isConnected == true) {
-            activeInfo.type == ConnectivityManager.TYPE_WIFI || activeInfo.type == ConnectivityManager.TYPE_MOBILE
-        } else {
-            false
-        }
+    companion object {
+        private val TAG: String = NetworkManager::class.java.name
     }
 
-    fun registerNetworkCallbacks(onAvailable: () -> Unit, onUnavailable: () -> Unit) {
-        networkCallback = object : ConnectivityManager.NetworkCallback() {
+    private val connectivityManager: ConnectivityManager = context.getSystemService(ConnectivityManager::class.java)
+
+    private val networkCallbacks = mutableMapOf<String, ConnectivityManager.NetworkCallback>()
+
+    private val mainNetworkCallback: ConnectivityManager.NetworkCallback
+
+    init {
+        mainNetworkCallback = object : ConnectivityManager.NetworkCallback() {
             override fun onAvailable(network: Network) {
-                onAvailable()
+                Log.d(TAG, "Network connection is available")
+                networkCallbacks.values.forEach {
+                    it.onAvailable(network)
+                }
             }
 
             override fun onLost(network: Network) {
-                onUnavailable()
+                Log.d(TAG, "Network connection is lost")
+                networkCallbacks.values.forEach {
+                    it.onLost(network)
+                }
             }
 
             override fun onUnavailable() {
-                onUnavailable()
+                Log.d(TAG, "Network connection is unavailable")
+                networkCallbacks.values.forEach {
+                    it.onUnavailable()
+                }
             }
         }
-        networkCallback?.let {
-            connectivityManager.registerDefaultNetworkCallback(it)
+        connectivityManager.registerDefaultNetworkCallback(mainNetworkCallback)
+    }
+
+    fun isInternetConnectionAvailable(): Boolean {
+        return connectivityManager.getNetworkCapabilities(connectivityManager.activeNetwork)?.let {
+            it.hasTransport(NetworkCapabilities.TRANSPORT_WIFI)
+                    || it.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR)
+                    || it.hasTransport(NetworkCapabilities.TRANSPORT_BLUETOOTH)
+                    || it.hasTransport(NetworkCapabilities.TRANSPORT_ETHERNET)
+                    || it.hasTransport(NetworkCapabilities.TRANSPORT_VPN)
+        } ?: false
+    }
+
+    fun registerNetworkCallbacks(callbackTag: String, onAvailable: (() -> Unit)?, onUnavailable: (() -> Unit)?) {
+        Log.d(TAG, "Add network callback for: $callbackTag")
+        networkCallbacks[callbackTag] = object : ConnectivityManager.NetworkCallback() {
+            override fun onAvailable(network: Network) {
+                onAvailable?.invoke()
+            }
+
+            override fun onLost(network: Network) {
+                onUnavailable?.invoke()
+            }
+
+            override fun onUnavailable() {
+                onUnavailable?.invoke()
+            }
         }
     }
 
-    fun unregisterNetworkCallbacks() {
-        networkCallback?.let {
-            connectivityManager.unregisterNetworkCallback(it)
-        }
+    fun unregisterNetworkCallbacks(callbackTag: String) {
+        Log.d(TAG, "Remove network callback for: $callbackTag")
+        networkCallbacks.remove(callbackTag)
     }
 }
