@@ -1,43 +1,44 @@
 package com.mevi
 
 import android.os.Bundle
-import android.widget.Toast
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
+import androidx.navigation.compose.rememberNavController
+import com.mevi.ui.MainContainerLayout
 import com.mevi.ui.internet.NetworkManager
-import com.mevi.ui.startup.standard.StartupChainHandler
+import com.mevi.ui.navigation.NavigationComponent
+import com.mevi.ui.navigation.NavigationRoute
+import com.mevi.ui.startup.standard.OnboardingChaneHandler
 import com.mevi.ui.theme.MeviTheme
 import org.koin.android.ext.android.inject
 
 class MainActivity : ComponentActivity() {
 
-    val networkManager: NetworkManager by inject()
+    companion object {
+        val TAG: String = MainActivity::class.java.name
+    }
+
+    private val networkManager: NetworkManager by inject()
+    private val navigationComponent: NavigationComponent by inject()
+    private val onboardingChaneHandler: OnboardingChaneHandler by inject()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         installSplashScreen()
         setContent {
             MeviTheme {
-                Surface(
-                    modifier = Modifier.fillMaxSize(),
-                    color = MaterialTheme.colorScheme.background
-                ) {
+                navigationComponent.initialize(rememberNavController(), rememberNavController(), rememberNavController(), rememberNavController())
+                onboardingChaneHandler.setFinalNode {
+                    initializeNetworkCallback()
                 }
+                MainContainerLayout(navigationComponent)
+                onboardingChaneHandler.execute()
             }
         }
-    }
-
-    override fun onStart() {
-        super.onStart()
-        StartupChainHandler(this).execute()
-        initializeNetworkManager()
     }
 
     override fun onStop() {
@@ -45,20 +46,23 @@ class MainActivity : ComponentActivity() {
         releaseNetworkManager()
     }
 
-    private fun initializeNetworkManager() {
-        networkManager.registerNetworkCallbacks(::onInternetAvailable, ::onInternetUnavailable)
+    private fun initializeNetworkCallback() {
+        networkManager.registerNetworkCallbacks(TAG, ::onInternetAvailable, ::onInternetUnavailable)
     }
 
     private fun releaseNetworkManager() {
-        networkManager.unregisterNetworkCallbacks()
+        networkManager.unregisterNetworkCallbacks(TAG)
     }
 
     private fun onInternetAvailable() {
-        Toast.makeText(this, "INTERNET is available", Toast.LENGTH_SHORT).show()
+        Log.d(TAG, "Internet connection has been restored")
     }
 
     private fun onInternetUnavailable() {
-        Toast.makeText(this, "INTERNET has been lost", Toast.LENGTH_SHORT).show()
+        runOnUiThread {
+            Log.d(TAG, "Internet connection has been lost")
+            navigationComponent.showAlert(NavigationRoute.ROUTE_ALERT_NO_INTERNET)
+        }
     }
 }
 

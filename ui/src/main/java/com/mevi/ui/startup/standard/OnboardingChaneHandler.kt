@@ -1,7 +1,8 @@
 package com.mevi.ui.startup.standard
 
-import com.mevi.MainActivity
 import com.mevi.common.chain.ChainHandler
+import com.mevi.ui.internet.NetworkManager
+import com.mevi.ui.navigation.NavigationComponent
 import com.mevi.ui.startup.standard.node.CheckInternetNode
 
 /**
@@ -9,10 +10,14 @@ import com.mevi.ui.startup.standard.node.CheckInternetNode
  * should be called when on base application startup
  *
  * @author Vadym Volin
+ * @author midnight85
  * @since 2/27/24
  */
-class StartupChainHandler(activity: MainActivity) : ChainHandler(
+class OnboardingChaneHandler(
+    navigator: NavigationComponent,
+    networkManager: NetworkManager
+) : ChainHandler(
     arrayOf(
-        CheckInternetNode(activity)
+        CheckInternetNode(navigator, networkManager)
     )
 )

@@ -26,6 +26,20 @@ abstract class ChainHandler(nodes: Array<ChainNode>) {
         }
     }
 
+
+    /**
+     * Adds final node, that will be called at the end of the chain
+     */
+    fun setFinalNode(finishCallback: () -> Unit) {
+        val lastNode = chainNodes.lastOrNull()
+        lastNode?.next = object : ChainNode() {
+            override fun execute() {
+                finishCallback()
+                complete()
+            }
+        }
+    }
+
     /**
      * Starts executing chain nodes
      */
