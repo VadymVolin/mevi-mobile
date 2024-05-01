@@ -13,22 +13,21 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.mevi.ui.R
 import com.mevi.ui.components.MeviButton
 import com.mevi.ui.navigation.NavigationComponent
 import com.mevi.ui.navigation.NavigationRoute
-import com.mevi.ui.translations.TextKey
-import com.mevi.ui.translations.TextMatcher
 import org.koin.androidx.compose.get
 
 const val TAG = "NoInternetConnectionAlert"
 
 @Composable
 fun NoInternetConnectionAlert(
-    textMatcher: TextMatcher = get<TextMatcher>(),
     networkManager: NetworkManager = get<NetworkManager>(),
     navigationComponent: NavigationComponent = get<NavigationComponent>(),
 ) {
@@ -44,7 +43,7 @@ fun NoInternetConnectionAlert(
             verticalArrangement = Arrangement.Center
         ) {
             Text(
-                text = textMatcher[TextKey.NO_INTERNET_CONNECTION_SCREEN_TITLE],
+                text = stringResource(id = R.string.NO_INTERNET_CONNECTION_SCREEN_TITLE),
                 textAlign = TextAlign.Center,
                 fontSize = 20.sp,
                 fontWeight = FontWeight.W500,
@@ -54,7 +53,7 @@ fun NoInternetConnectionAlert(
                     .fillMaxWidth()
             )
             Text(
-                text = textMatcher[TextKey.NO_INTERNET_CONNECTION_SCREEN_BODY],
+                text = stringResource(id = R.string.NO_INTERNET_CONNECTION_SCREEN_BODY),
                 textAlign = TextAlign.Center,
                 fontSize = 14.sp,
                 fontWeight = FontWeight.W400,
@@ -75,7 +74,7 @@ fun NoInternetConnectionAlert(
                     return@MeviButton
                 }
             },
-            text = textMatcher[TextKey.TRY_AGAIN_BUTTON]
+            text = stringResource(id = R.string.TRY_AGAIN_BUTTON)
         )
     }
 }

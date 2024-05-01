@@ -1,13 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name" translatable="false">Mevi</string>
     <string name="NO_INFO">Information is N/A</string>
     <string name="TEXT_CHATS_ROUTE">Chats</string>
-    <string name="TEXT_RANDOM_CALL_ROUTE">Call</string>
+    <string name="TEXT_RANDOM_CALL_ROUTE">Jump to call</string>
     <string name="TEXT_ACCOUNT_ROUTE">Account</string>
     <string name="NO_INTERNET_CONNECTION_SCREEN_TITLE">No connection</string>
     <string name="NO_INTERNET_CONNECTION_SCREEN_BODY">Please check your network connection</string>
     <string name="TRY_AGAIN_BUTTON">Try again</string>
     <string name="OK_BUTTON">Ok</string>
     <string name="CLOSE_BUTTON">Close</string>
-    <string name="N_A" translatable="false">N/A</string>
 </resources>

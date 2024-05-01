@@ -14,7 +14,6 @@ import com.mevi.ui.navigation.NavigationComponent
 import com.mevi.ui.navigation.NavigationRoute
 import com.mevi.ui.startup.standard.OnboardingChaneHandler
 import com.mevi.ui.theme.MeviTheme
-import com.mevi.ui.translations.TextMatcher
 import org.koin.android.ext.android.inject
 
 class MainActivity : ComponentActivity() {
@@ -24,7 +23,6 @@ class MainActivity : ComponentActivity() {
     }
 
     private val networkManager: NetworkManager by inject()
-    private val textMatcher: TextMatcher by inject()
     private val navigationComponent: NavigationComponent by inject()
     private val onboardingChaneHandler: OnboardingChaneHandler by inject()
 
@@ -37,7 +35,7 @@ class MainActivity : ComponentActivity() {
                 onboardingChaneHandler.setFinalNode {
                     initializeNetworkCallback()
                 }
-                MainContainerLayout(navigationComponent, textMatcher)
+                MainContainerLayout(navigationComponent)
                 onboardingChaneHandler.execute()
             }
         }

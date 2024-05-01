@@ -11,10 +11,10 @@ import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.res.stringResource
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.compose.currentBackStackEntryAsState
-import com.mevi.ui.translations.TextKey
-import com.mevi.ui.translations.TextMatcher
+import com.mevi.ui.R
 import com.mevi.ui.navigation.NavigationComponent
 import com.mevi.ui.navigation.NavigationRoute
 
@@ -23,8 +23,7 @@ fun BottomNavigationBar(
     bottomRoutes: Array<NavigationRoute> = arrayOf(
         NavigationRoute.ROUTE_SCREEN_CHATS, NavigationRoute.ROUTE_SCREEN_RANDOM_CALL, NavigationRoute.ROUTE_SCREEN_ACCOUNT
     ),
-    navigationComponent: NavigationComponent,
-    textMatcher: TextMatcher
+    navigationComponent: NavigationComponent
 ) =
     NavigationBar {
         val navBackStackEntry by navigationComponent.getScreenNavController().currentBackStackEntryAsState()
@@ -32,13 +31,19 @@ fun BottomNavigationBar(
         bottomRoutes.forEach { item ->
             NavigationBarItem(
                 icon = { Icon(getIconByRoute(item), contentDescription = item.route) },
-                label = { Text(textMatcher[item.nameKey ?: TextKey.NO_INFO]) },
+                label = { Text(stringResource(id = getTextIdByRoute(item))) },
                 selected = currentDestination?.hierarchy?.any { it.route == item.route } == true,
                 onClick = { navigationComponent.showScreen(item) }
             )
         }
     }
 
+fun getTextIdByRoute(route: NavigationRoute) = when (route) {
+    NavigationRoute.ROUTE_SCREEN_CHATS -> R.string.TEXT_CHATS_ROUTE
+    NavigationRoute.ROUTE_SCREEN_RANDOM_CALL -> R.string.TEXT_RANDOM_CALL_ROUTE
+    NavigationRoute.ROUTE_SCREEN_ACCOUNT -> R.string.TEXT_ACCOUNT_ROUTE
+    else -> R.string.N_A
+}
 
 fun getIconByRoute(route: NavigationRoute) = when (route) {
     NavigationRoute.ROUTE_SCREEN_CHATS -> Icons.AutoMirrored.Filled.Chat

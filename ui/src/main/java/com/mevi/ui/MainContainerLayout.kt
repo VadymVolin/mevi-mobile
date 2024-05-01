@@ -21,12 +21,10 @@ import com.mevi.ui.navigation.host.AlertNavigationHost
 import com.mevi.ui.navigation.host.DialogNavigationHost
 import com.mevi.ui.navigation.host.NotificationNavigationHost
 import com.mevi.ui.navigation.host.ScreenNavigationHost
-import com.mevi.ui.translations.TextMatcher
 
 @Composable
 fun MainContainerLayout(
-    navigationComponent: NavigationComponent,
-    textMatcher: TextMatcher
+    navigationComponent: NavigationComponent
 ) {
     val modifier = Modifier.fillMaxSize()
     Surface (modifier = modifier) {
@@ -34,7 +32,7 @@ fun MainContainerLayout(
         Scaffold(
             modifier = modifier.background(MaterialTheme.colorScheme.background),
             bottomBar = {
-                BottomNavigationBar(navigationComponent = navigationComponent, textMatcher = textMatcher)
+                BottomNavigationBar(navigationComponent = navigationComponent)
             }
         ) {
             ScreenNavigationHost(
