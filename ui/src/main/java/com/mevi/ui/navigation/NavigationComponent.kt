@@ -4,6 +4,10 @@ import android.util.Log
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
+import com.mevi.ui.navigation.NavigationComponent.AlertNavigator
+import com.mevi.ui.navigation.NavigationComponent.DialogNavigator
+import com.mevi.ui.navigation.NavigationComponent.NotificationNavigator
+import com.mevi.ui.navigation.NavigationComponent.ScreenNavigator
 
 /**
  * Navigation component,
@@ -47,6 +51,10 @@ class NavigationComponent {
         screenNavigator.navigate(route)
     }
 
+    fun showScreen(route: NavigationRoute, onClose: () -> Unit) {
+        screenNavigator.navigate(route, onClose)
+    }
+
     fun closeScreen() {
         screenNavigator.navigateBack()
     }
@@ -57,6 +65,10 @@ class NavigationComponent {
 
     fun showDialog(route: NavigationRoute) {
         dialogNavigator.navigate(route)
+    }
+
+    fun showDialog(route: NavigationRoute, onClose: () -> Unit) {
+        dialogNavigator.navigate(route, onClose)
     }
 
     fun closeDialog() {
@@ -71,6 +83,10 @@ class NavigationComponent {
         alertNavigator.navigate(route)
     }
 
+    fun showAlert(route: NavigationRoute, onClose: () -> Unit) {
+        alertNavigator.navigate(route, onClose)
+    }
+
     fun closeAlert() {
         alertNavigator.navigateBack()
     }
@@ -81,6 +97,10 @@ class NavigationComponent {
 
     fun showNotification(route: NavigationRoute) {
         notificationNavigator.navigate(route)
+    }
+
+    fun showNotification(route: NavigationRoute, onClose: () -> Unit) {
+        notificationNavigator.navigate(route, onClose)
     }
 
     fun closeNotification() {
@@ -97,22 +117,36 @@ class NavigationComponent {
     fun getNotificationNavController() = notificationNavigator.getNavController()
 
     private interface Navigator {
+
+        val navigationCallback: MutableMap<String, () -> Unit>
         fun getTag(): String
         fun getNavController(): NavHostController
         fun navigate(route: NavigationRoute)
+        fun navigate(route: NavigationRoute, onClose: () -> Unit)
 
         fun navigateBack() {
+            val destinationRoute = getNavController().currentDestination?.route
             val wasDestinationPopped = getNavController().popBackStack()
+            if (wasDestinationPopped.and(destinationRoute != null)) {
+                navigationCallback[destinationRoute]?.invoke()
+            }
             Log.d(getTag(), "navigateBack, was popped: $wasDestinationPopped")
         }
 
         fun navigateBack(route: NavigationRoute) {
+            val destinationRoute = getNavController().currentDestination?.route
             val wasDestinationPopped = getNavController().popBackStack(route.route, inclusive = true)
+            if (wasDestinationPopped.and(destinationRoute != null).and(route.route == destinationRoute)) {
+                navigationCallback[destinationRoute]?.invoke()
+            }
             Log.d(getTag(), "navigateBack: ${route.route}, was popped: $wasDestinationPopped")
         }
     }
 
-    private class ScreenNavigator(private val navController: NavHostController) : Navigator {
+    private class ScreenNavigator(
+        private val navController: NavHostController,
+        override val navigationCallback: MutableMap<String, () -> Unit> = mutableMapOf()
+    ) : Navigator {
         companion object {
             val TAG: String = NavigationComponent.TAG.plus(RIGHT_ARROW).plus(ScreenNavigator::class.java.name)
         }
@@ -140,12 +174,21 @@ class NavigationComponent {
                 }
             }
         }
+
+        override fun navigate(route: NavigationRoute, onClose: () -> Unit) {
+            navigationCallback[route.route] = onClose
+            navigate(route)
+        }
     }
 
-    private class DialogNavigator(private val navController: NavHostController) : Navigator {
+    private class DialogNavigator(
+        private val navController: NavHostController,
+        override val navigationCallback: MutableMap<String, () -> Unit> = mutableMapOf()
+    ) : Navigator {
         companion object {
             val TAG: String = NavigationComponent.TAG.plus(RIGHT_ARROW).plus(DialogNavigator::class.java.name)
         }
+
         override fun getTag(): String = TAG
 
         override fun getNavController(): NavHostController = navController
@@ -166,9 +209,17 @@ class NavigationComponent {
                 }
             }
         }
+
+        override fun navigate(route: NavigationRoute, onClose: () -> Unit) {
+            navigationCallback[route.route] = onClose
+            navigate(route)
+        }
     }
 
-    private class AlertNavigator(private val navController: NavHostController) : Navigator {
+    private class AlertNavigator(
+        private val navController: NavHostController,
+        override val navigationCallback: MutableMap<String, () -> Unit> = mutableMapOf()
+    ) : Navigator {
         companion object {
             val TAG: String = NavigationComponent.TAG.plus(RIGHT_ARROW).plus(AlertNavigator::class.java.name)
         }
@@ -193,9 +244,17 @@ class NavigationComponent {
                 }
             }
         }
+
+        override fun navigate(route: NavigationRoute, onClose: () -> Unit) {
+            navigationCallback[route.route] = onClose
+            navigate(route)
+        }
     }
 
-    private class NotificationNavigator(private val navController: NavHostController) : Navigator {
+    private class NotificationNavigator(
+        private val navController: NavHostController,
+        override val navigationCallback: MutableMap<String, () -> Unit> = mutableMapOf()
+    ) : Navigator {
 
         companion object {
             val TAG: String = NavigationComponent.TAG.plus(RIGHT_ARROW).plus(NotificationNavigator::class.java.name)
@@ -220,6 +279,11 @@ class NavigationComponent {
                     restoreState = true
                 }
             }
+        }
+
+        override fun navigate(route: NavigationRoute, onClose: () -> Unit) {
+            navigationCallback[route.route] = onClose
+            navigate(route)
         }
     }
 

@@ -27,8 +27,7 @@ class CheckInternetNode(
         if (networkManager.isInternetConnectionAvailable()) {
             complete()
         } else {
-            navigationComponent.showAlert(NavigationRoute.ROUTE_ALERT_NO_INTERNET)
-            networkManager.registerNetworkCallbacks(TAG, { complete() }, null)
+            navigationComponent.showAlert(NavigationRoute.ROUTE_ALERT_NO_INTERNET, ::complete)
         }
     }
 
