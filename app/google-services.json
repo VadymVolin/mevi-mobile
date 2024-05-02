@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "688998092838",
+    "project_id": "mevi-mobile",
+    "storage_bucket": "mevi-mobile.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:688998092838:android:76c0c305ac320a717756e7",
+        "android_client_info": {
+          "package_name": "com.mevi.mobile"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBOvQ59MiZpBxImgmfV-Gxnl-iHVX8wxto"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
