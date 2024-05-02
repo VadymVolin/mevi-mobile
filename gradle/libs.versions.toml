@@ -17,7 +17,7 @@ lifecycleRuntimeKtxVersion = "2.7.0"
 materialIconsExtendedVersion = "1.6.7"
 navigationComposeVersion = "2.7.7"
 googleGmsVersion = "4.4.1"
-firebaseBomVersion = "32.8.1"
+firebaseBomVersion = "33.0.0"
 
 
 [libraries]
