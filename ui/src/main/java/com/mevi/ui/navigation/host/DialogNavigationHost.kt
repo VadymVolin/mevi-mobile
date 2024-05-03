@@ -7,6 +7,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.mevi.ui.navigation.NavigationComponent
 import com.mevi.ui.navigation.NavigationRoute
+import com.mevi.ui.screens.authorization.AuthorizationScreen
 
 @Composable
 fun DialogNavigationHost(
@@ -19,5 +20,8 @@ fun DialogNavigationHost(
 ) {
     composable(NavigationRoute.ROUTE_EMPTY.route) {
         Log.d("DialogNavigationHost", "Initial empty composable")
+    }
+    composable(NavigationRoute.ROUTE_DIALOG_AUTHORIZATION_DIALOG.route) {
+        AuthorizationScreen()
     }
 }

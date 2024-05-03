@@ -19,7 +19,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.mevi.ui.R
-import com.mevi.ui.components.MeviButton
+import com.mevi.ui.components.buttons.MeviButton
 import com.mevi.ui.navigation.NavigationComponent
 import com.mevi.ui.navigation.NavigationRoute
 import org.koin.compose.koinInject

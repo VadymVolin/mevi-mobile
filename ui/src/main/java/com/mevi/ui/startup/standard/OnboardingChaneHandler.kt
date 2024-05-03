@@ -3,6 +3,7 @@ package com.mevi.ui.startup.standard
 import com.mevi.common.chain.ChainHandler
 import com.mevi.ui.internet.NetworkManager
 import com.mevi.ui.navigation.NavigationComponent
+import com.mevi.ui.startup.standard.node.AuthorizationNode
 import com.mevi.ui.startup.standard.node.CheckInternetNode
 
 /**
@@ -18,6 +19,7 @@ class OnboardingChaneHandler(
     networkManager: NetworkManager
 ) : ChainHandler(
     arrayOf(
-        CheckInternetNode(navigator, networkManager)
+        CheckInternetNode(navigator, networkManager),
+        AuthorizationNode(navigator)
     )
 )

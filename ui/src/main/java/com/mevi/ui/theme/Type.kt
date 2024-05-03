@@ -115,7 +115,7 @@ val Typography = Typography(
         //button
         fontSize = 16.sp,
         fontFamily = Inter,
-        fontWeight = FontWeight.Normal,
+        fontWeight = FontWeight.Medium,
         lineHeight = 24.sp,
     ),
     labelSmall = TextStyle(
