@@ -42,8 +42,14 @@ android {
 
 dependencies {
     implementation(libs.androidx.core.ktx)
+
     implementation(project(":domain"))
     implementation(project(":common"))
+
+    // firebase
+    implementation(platform(libs.firebase.bom))
+    implementation(libs.firebase.analytics)
+
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
