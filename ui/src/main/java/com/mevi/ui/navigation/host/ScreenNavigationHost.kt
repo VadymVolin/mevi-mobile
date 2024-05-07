@@ -4,9 +4,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import com.mevi.ui.account.AccountScreen
-import com.mevi.ui.call.RandomCallScreen
-import com.mevi.ui.chats.ChatsScreen
+import com.mevi.ui.screens.account.AccountScreen
+import com.mevi.ui.screens.call.RandomCallScreen
+import com.mevi.ui.screens.chats.ChatsScreen
 import com.mevi.ui.navigation.NavigationComponent
 import com.mevi.ui.navigation.NavigationRoute
 

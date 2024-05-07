@@ -19,10 +19,11 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.mevi.ui.R
-import com.mevi.ui.components.MeviButton
+import com.mevi.ui.components.buttons.MeviButton
 import com.mevi.ui.navigation.NavigationComponent
 import com.mevi.ui.navigation.NavigationRoute
 import org.koin.compose.koinInject
+
 
 const val TAG = "NoInternetConnectionAlert"
 
@@ -64,6 +65,7 @@ fun NoInternetConnectionAlert(
             )
         }
         MeviButton(
+            modifier = Modifier.padding(16.dp),
             onClick = {
                 Log.d(TAG, "Start checking network connection")
                 if (networkManager.isInternetConnectionAvailable()) {

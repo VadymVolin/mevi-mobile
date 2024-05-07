@@ -1,4 +1,4 @@
-package com.mevi.ui.call
+package com.mevi.ui.screens.call
 
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
