@@ -1,6 +1,7 @@
 package com.mevi.data.repository.auth.api
 
-import com.mevi.domain.repository.auth.model.AuthenticationResult
+import com.google.firebase.auth.FirebaseUser
+import com.mevi.data.repository.auth.api.model.ApiResult
 
 /**
  * Base interface for user api
@@ -19,7 +20,7 @@ interface UserApi {
      * where [Pair.first] is an email or username
      * and [Pair.second] is a password
      */
-    suspend fun register(credentials: Pair<String, String>): AuthenticationResult
+    suspend fun register(credentials: Pair<String, String>): ApiResult<FirebaseUser>
 
 
     /**
@@ -29,12 +30,12 @@ interface UserApi {
      * where [Pair.first] is an email or username
      * and [Pair.second] is a password
      */
-    suspend fun login(credentials: Pair<String, String>): AuthenticationResult
+    suspend fun login(credentials: Pair<String, String>): ApiResult<FirebaseUser>
 
     /**
      * Logs out user
      */
-    suspend fun logout(): AuthenticationResult
+    suspend fun logout(): ApiResult<Unit>
 
     /**
      * Returns if user logged in or not

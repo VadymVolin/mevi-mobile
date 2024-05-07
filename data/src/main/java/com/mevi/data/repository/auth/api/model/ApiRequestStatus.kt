@@ -1,14 +1,14 @@
-package com.mevi.domain.repository.auth.model
+package com.mevi.data.repository.auth.api.model
 
 /**
- * Authentication results
+ * General API results
  *
  * @author Vadym Volin
  * @author midnight85
  *
  * @since 5/5/24
  */
-enum class AuthenticationResult {
+enum class ApiRequestStatus {
     SUCCESS,
     ERROR_UNEXPECTED,
     ERROR_ACCOUNT_DOES_NO_EXIST,

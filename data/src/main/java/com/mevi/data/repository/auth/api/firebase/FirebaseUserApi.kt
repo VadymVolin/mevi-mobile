@@ -6,9 +6,11 @@ import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException
 import com.google.firebase.auth.FirebaseAuthInvalidUserException
 import com.google.firebase.auth.FirebaseAuthUserCollisionException
 import com.google.firebase.auth.FirebaseAuthWeakPasswordException
+import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.auth
 import com.mevi.data.repository.auth.api.UserApi
-import com.mevi.domain.repository.auth.model.AuthenticationResult
+import com.mevi.data.repository.auth.api.model.ApiRequestStatus
+import com.mevi.data.repository.auth.api.model.ApiResult
 import kotlinx.coroutines.tasks.await
 
 /**
@@ -24,54 +26,62 @@ class FirebaseUserApi : UserApi {
     private val firebaseAuth: FirebaseAuth
         get() = Firebase.auth
 
-    override suspend fun register(credentials: Pair<String, String>): AuthenticationResult = try {
+    override suspend fun register(credentials: Pair<String, String>): ApiResult<FirebaseUser> = try {
         val authResult = firebaseAuth
             .createUserWithEmailAndPassword(credentials.first, credentials.second)
             .await()
-        if (authResult.user != null) AuthenticationResult.SUCCESS else AuthenticationResult.ERROR_ACCOUNT_DOES_NO_EXIST
+        val firebaseUser = authResult.user
+        if (firebaseUser != null) {
+            ApiResult.Success(ApiRequestStatus.SUCCESS, firebaseUser)
+        } else {
+            ApiResult.Error(ApiRequestStatus.ERROR_ACCOUNT_DOES_NO_EXIST)
+        }
     } catch (e: Exception) {
-        getErrorByException(AuthType.REGISTRATION, e)
+        ApiResult.Error(getErrorByException(ActionType.REGISTRATION, e))
     }
 
-    override suspend fun login(credentials: Pair<String, String>): AuthenticationResult = try {
+    override suspend fun login(credentials: Pair<String, String>): ApiResult<FirebaseUser> = try {
         val authResult = firebaseAuth
             .signInWithEmailAndPassword(credentials.first, credentials.second)
             .await()
-        if (authResult.user != null) AuthenticationResult.SUCCESS else AuthenticationResult.ERROR_ACCOUNT_DOES_NO_EXIST
+        val firebaseUser: FirebaseUser? = authResult.user
+        if (firebaseUser != null) {
+            ApiResult.Success(ApiRequestStatus.SUCCESS, firebaseUser)
+        } else {
+            ApiResult.Error(ApiRequestStatus.ERROR_ACCOUNT_DOES_NO_EXIST)
+        }
     } catch (e: Exception) {
-        getErrorByException(AuthType.LOGIN, e)
+        ApiResult.Error(getErrorByException(ActionType.LOGIN, e))
     }
 
-    override suspend fun logout() = try {
-        firebaseAuth.signOut()
-        AuthenticationResult.SUCCESS
+    override suspend fun logout(): ApiResult<Unit> = try {
+        ApiResult.Success(ApiRequestStatus.SUCCESS, firebaseAuth.signOut())
     } catch (_: Exception) {
-        AuthenticationResult.ERROR_UNEXPECTED
+        ApiResult.Error(ApiRequestStatus.ERROR_UNEXPECTED)
     }
 
     override val isAuthenticated: Boolean
         get() = firebaseAuth.currentUser != null
 
-
-    private fun getErrorByException(authType: AuthType, authException: Exception): AuthenticationResult =
+    private fun getErrorByException(actionType: ActionType, authException: Exception): ApiRequestStatus =
         when {
             // thrown if the user account corresponding to email does not exist or has been disabled
-            authException is FirebaseAuthInvalidUserException -> AuthenticationResult.ERROR_ACCOUNT_DOES_NO_EXIST
+            authException is FirebaseAuthInvalidUserException -> ApiRequestStatus.ERROR_ACCOUNT_DOES_NO_EXIST
             // or if the email or password is invalid
-            authException is FirebaseAuthInvalidCredentialsException && authType == AuthType.LOGIN -> AuthenticationResult.ERROR_WRONG_EMAIL_OR_PASSWORD
+            authException is FirebaseAuthInvalidCredentialsException && actionType == ActionType.LOGIN -> ApiRequestStatus.ERROR_WRONG_EMAIL_OR_PASSWORD
             // thrown if the email address is malformed
-            authException is FirebaseAuthInvalidCredentialsException && authType == AuthType.REGISTRATION -> AuthenticationResult.ERROR_INCORRECT_EMAIL
+            authException is FirebaseAuthInvalidCredentialsException && actionType == ActionType.REGISTRATION -> ApiRequestStatus.ERROR_INCORRECT_EMAIL
             // thrown if the password is not strong enough
-            authException is FirebaseAuthWeakPasswordException -> AuthenticationResult.ERROR_WEAK_PASSWORD
+            authException is FirebaseAuthWeakPasswordException -> ApiRequestStatus.ERROR_WEAK_PASSWORD
             // thrown if there already exists an account with the given email address
-            authException is FirebaseAuthUserCollisionException -> AuthenticationResult.ERROR_ACCOUNT_ALREADY_EXISTS
-            else -> AuthenticationResult.ERROR_UNEXPECTED
+            authException is FirebaseAuthUserCollisionException -> ApiRequestStatus.ERROR_ACCOUNT_ALREADY_EXISTS
+            else -> ApiRequestStatus.ERROR_UNEXPECTED
         }
 
     /**
-     * Authentication type
+     * Firebase action type
      */
-    private enum class AuthType {
+    private enum class ActionType {
         LOGIN, REGISTRATION
     }
 }
