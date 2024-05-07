@@ -9,5 +9,13 @@
     <string name="TRY_AGAIN_BUTTON">Try again</string>
     <string name="OK_BUTTON">Ok</string>
     <string name="CLOSE_BUTTON">Close</string>
+    <string name="TEXT_SIGN_IN">Sign in</string>
+    <string name="TEXT_SIGN_UP">Sign up</string>
+    <string name="WELCOME_SECTION_TITLE">Welcome to Mevi</string>
+    <string name="WELCOME_SECTION_TEXT">Welcome back! Please enter your details</string>
+    <string name="FORMTEXTFIELD_EMAIL_PLACEHOLDER">Enter email</string>
+    <string name="FORMTEXTFIELD_PASSWORD_PLACEHOLDER">Enter password</string>
+    <string name="TEXT_FORGOT_PASSWORD">Forgot password?</string>
+    <string name="TEXT_OR_SIGN_IN_WITH">Or sign in with</string>
     <string name="N_A" translatable="false">N/A</string>
 </resources>

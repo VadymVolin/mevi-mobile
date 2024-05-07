@@ -21,9 +21,9 @@ fun MeviButton(
         onClick = onClick,
         enabled = enabled,
         shape = RoundedCornerShape(12.dp),
-        modifier = Modifier
+        modifier = modifier then Modifier
             .fillMaxWidth()
-            .height(48.dp) then modifier
+            .height(48.dp)
     ) {
         Text(
             text = text,

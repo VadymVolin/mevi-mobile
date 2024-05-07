@@ -1,7 +1,6 @@
 package com.mevi.ui.components.inputs
 
 import android.content.res.Configuration
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -33,6 +32,7 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.mevi.ui.components.buttons.MeviIconButton
 import com.mevi.ui.theme.MeviTheme
 
 @Composable
@@ -111,11 +111,10 @@ fun FormTextField(
         },
         trailingIcon = if (isPassword && value.isNotEmpty()) {
             {
-                Icon(
-                    modifier = Modifier.clickable { passwordVisibility = !passwordVisibility },
-                    contentDescription = null,
-                    imageVector = if (passwordVisibility) Icons.Outlined.VisibilityOff
-                    else Icons.Outlined.Visibility
+                MeviIconButton(
+                    onClick = { passwordVisibility = !passwordVisibility },
+                    icon = if (passwordVisibility) Icons.Outlined.VisibilityOff
+                    else Icons.Outlined.Visibility,
                 )
             }
         } else {

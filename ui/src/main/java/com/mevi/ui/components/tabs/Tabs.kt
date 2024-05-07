@@ -9,19 +9,22 @@ import androidx.compose.material3.TabRowDefaults.tabIndicatorOffset
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.mevi.ui.R
 import com.mevi.ui.theme.MeviTheme
 
 @Composable
 fun Tabs(
     selectedTabIndex: Int,
-    tabTitles: List<String>,
+    tabTitlesId: List<Int>,
     onTabClick: (Int) -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -33,10 +36,10 @@ fun Tabs(
                 modifier = Modifier.tabIndicatorOffset(it[selectedTabIndex]), width = 16.dp
             )
         }) {
-        tabTitles.forEachIndexed { index, title ->
+        tabTitlesId.forEachIndexed { index, titleId ->
             Tab(text = {
                 Text(
-                    text = title, style = MaterialTheme.typography.labelLarge
+                    text = stringResource(id = titleId), style = MaterialTheme.typography.labelLarge
                 )
             },
                 selectedContentColor = MaterialTheme.colorScheme.primary,
@@ -61,11 +64,11 @@ fun Tabs(
 )
 @Composable
 fun TabsPreview() {
-    var selectedTabIndex by remember { mutableStateOf(0) }
+    var selectedTabIndex by remember { mutableIntStateOf(0) }
     fun onTabClick(index: Int) {
         selectedTabIndex = index
     }
-    val tabTitles = listOf("Sign in", "Sign up")
+    val tabTitles = listOf( R.string.TEXT_SIGN_IN, R.string.TEXT_SIGN_UP)
     MeviTheme {
         Tabs(selectedTabIndex,
             tabTitles,

@@ -24,6 +24,7 @@ import com.mevi.ui.navigation.NavigationComponent
 import com.mevi.ui.navigation.NavigationRoute
 import org.koin.compose.koinInject
 
+
 const val TAG = "NoInternetConnectionAlert"
 
 @Composable
@@ -64,6 +65,7 @@ fun NoInternetConnectionAlert(
             )
         }
         MeviButton(
+            modifier = Modifier.padding(16.dp),
             onClick = {
                 Log.d(TAG, "Start checking network connection")
                 if (networkManager.isInternetConnectionAvailable()) {
