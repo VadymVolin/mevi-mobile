@@ -27,12 +27,11 @@ fun BottomNavigationBar(
 ) =
     NavigationBar {
         val navBackStackEntry by navigationComponent.getScreenNavController().currentBackStackEntryAsState()
-        val currentDestination = navBackStackEntry?.destination
         bottomRoutes.forEach { item ->
             NavigationBarItem(
                 icon = { Icon(getIconByRoute(item), contentDescription = item.route) },
                 label = { Text(stringResource(id = getTextIdByRoute(item))) },
-                selected = currentDestination?.hierarchy?.any { it.route == item.route } == true,
+                selected = navBackStackEntry?.destination?.hierarchy?.any { it.route == item.route } == true,
                 onClick = { navigationComponent.showScreen(item) }
             )
         }

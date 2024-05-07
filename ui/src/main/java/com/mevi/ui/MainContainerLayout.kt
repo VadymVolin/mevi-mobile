@@ -45,9 +45,8 @@ fun MainContainerLayout(
                 navigationComponent = navigationComponent
             )
         }
-        DialogNavigationHost(modifier.background(Color(android.graphics.Color.TRANSPARENT)), navigationComponent)
-        AlertNavigationHost(modifier.background(Color(android.graphics.Color.TRANSPARENT)), navigationComponent)
-        NotificationNavigationHost(modifier.background(Color(android.graphics.Color.TRANSPARENT)), navigationComponent)
+        DialogNavigationHost(Modifier.fillMaxSize().background(Color(android.graphics.Color.TRANSPARENT)), navigationComponent)
+        AlertNavigationHost(Modifier.fillMaxSize().background(Color(android.graphics.Color.TRANSPARENT)), navigationComponent)
+        NotificationNavigationHost(Modifier.fillMaxSize().background(Color(android.graphics.Color.TRANSPARENT)), navigationComponent)
     }
-
 }

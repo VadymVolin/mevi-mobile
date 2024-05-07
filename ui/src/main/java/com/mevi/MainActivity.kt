@@ -29,12 +29,12 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         installSplashScreen()
+        onboardingChaneHandler.setFinalNode {
+            initializeNetworkCallback()
+        }
         setContent {
             MeviTheme {
                 navigationComponent.initialize(rememberNavController(), rememberNavController(), rememberNavController(), rememberNavController())
-                onboardingChaneHandler.setFinalNode {
-                    initializeNetworkCallback()
-                }
                 MainContainerLayout(navigationComponent)
                 onboardingChaneHandler.execute()
             }
@@ -63,12 +63,5 @@ class MainActivity : ComponentActivity() {
             Log.d(TAG, "Internet connection has been lost")
             navigationComponent.showAlert(NavigationRoute.ROUTE_ALERT_NO_INTERNET)
         }
-    }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun GreetingPreview() {
-    MeviTheme {
     }
 }

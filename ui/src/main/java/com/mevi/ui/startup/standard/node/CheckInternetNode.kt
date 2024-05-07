@@ -1,6 +1,5 @@
 package com.mevi.ui.startup.standard.node
 
-import android.util.Log
 import com.mevi.common.chain.node.ChainNode
 import com.mevi.ui.internet.NetworkManager
 import com.mevi.ui.navigation.NavigationComponent
