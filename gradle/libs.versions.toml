@@ -1,0 +1,54 @@
+[versions]
+compileSdk = "34"
+minSdk = "26"
+kotlinCompilerExtensionVersion = "1.5.5"
+androidGradlePluginVersion = "8.4.0"
+kotlinAndroidVersion = "1.9.20"
+activityComposeVersion = "1.9.0"
+coilComposeVersion = "2.6.0"
+composeBomVersion = "2024.05.00"
+coreKtxVersion = "1.13.1"
+coreSplashscreenVersion = "1.0.1"
+espressoCoreVersion = "3.5.1"
+junitVersion = "4.13.2"
+junitExtVersion = "1.1.5"
+koinAndroidxComposeVersion = "3.5.6"
+lifecycleRuntimeKtxVersion = "2.7.0"
+materialIconsExtendedVersion = "1.6.7"
+navigationComposeVersion = "2.7.7"
+googleGmsVersion = "4.4.1"
+firebaseBomVersion = "33.0.0"
+
+
+[libraries]
+androidx-activity-compose = { module = "androidx.activity:activity-compose", version.ref = "activityComposeVersion" }
+androidx-compose-bom = { module = "androidx.compose:compose-bom", version.ref = "composeBomVersion" }
+androidx-core-ktx = { module = "androidx.core:core-ktx", version.ref = "coreKtxVersion" }
+androidx-core-splashscreen = { module = "androidx.core:core-splashscreen", version.ref = "coreSplashscreenVersion" }
+androidx-espresso-core = { module = "androidx.test.espresso:espresso-core", version.ref = "espressoCoreVersion" }
+androidx-junit = { module = "androidx.test.ext:junit", version.ref = "junitExtVersion" }
+androidx-lifecycle-runtime-ktx = { module = "androidx.lifecycle:lifecycle-runtime-ktx", version.ref = "lifecycleRuntimeKtxVersion" }
+androidx-material-icons-extended = { module = "androidx.compose.material:material-icons-extended", version.ref = "materialIconsExtendedVersion" }
+androidx-material3 = { module = "androidx.compose.material3:material3" }
+androidx-navigation-compose = { module = "androidx.navigation:navigation-compose", version.ref = "navigationComposeVersion" }
+androidx-ui-graphics = { module = "androidx.compose.ui:ui-graphics" }
+androidx-ui = { module = "androidx.compose.ui:ui" }
+androidx-ui-tooling = { module = "androidx.compose.ui:ui-tooling" }
+androidx-ui-test-junit4 = { module = "androidx.compose.ui:ui-test-junit4" }
+androidx-ui-test-manifest = { module = "androidx.compose.ui:ui-test-manifest" }
+androidx-ui-tooling-preview = { module = "androidx.compose.ui:ui-tooling-preview" }
+junit = { module = "junit:junit", version.ref = "junitVersion" }
+koin-androidx-compose = { module = "io.insert-koin:koin-androidx-compose", version.ref = "koinAndroidxComposeVersion" }
+coil-compose = { module = "io.coil-kt:coil-compose", version.ref = "coilComposeVersion" }
+firebase-bom = { module = "com.google.firebase:firebase-bom", version.ref = "firebaseBomVersion" }
+firebase-analytics = { module = "com.google.firebase:firebase-analytics" }
+
+
+[plugins]
+android-application-plugin = { id = "com.android.application", version.ref = "androidGradlePluginVersion" }
+android-kotlin-plugin = { id = "org.jetbrains.kotlin.android", version.ref = "kotlinAndroidVersion" }
+android-kotlin-jvm-plugin = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlinAndroidVersion" }
+android-library-plugin = { id = "com.android.library", version.ref = "androidGradlePluginVersion" }
+android-google-gms-plugin = { id = "com.google.gms.google-services", version.ref = "googleGmsVersion" }
+java-library-plugin = { id = "java-library" }
+

@@ -22,14 +22,14 @@ import com.mevi.ui.R
 import com.mevi.ui.components.MeviButton
 import com.mevi.ui.navigation.NavigationComponent
 import com.mevi.ui.navigation.NavigationRoute
-import org.koin.androidx.compose.get
+import org.koin.compose.koinInject
 
 const val TAG = "NoInternetConnectionAlert"
 
 @Composable
 fun NoInternetConnectionAlert(
-    networkManager: NetworkManager = get<NetworkManager>(),
-    navigationComponent: NavigationComponent = get<NavigationComponent>(),
+    networkManager: NetworkManager = koinInject<NetworkManager>(),
+    navigationComponent: NavigationComponent = koinInject<NavigationComponent>(),
 ) {
     Box(
         modifier = Modifier
