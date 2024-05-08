@@ -2,15 +2,10 @@ package com.mevi.data.repository.user.api.firebase
 
 import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException
 import com.google.firebase.auth.FirebaseAuthInvalidUserException
-import com.google.firebase.auth.FirebaseAuthUserCollisionException
-import com.google.firebase.auth.FirebaseAuthWeakPasswordException
-import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.auth
 import com.mevi.data.repository.user.api.UserApi
-import com.mevi.data.repository.user.api.model.ApiRequestStatus
-import com.mevi.data.repository.user.api.model.ApiResult
+import com.mevi.data.repository.user.api.model.UserDto
 import kotlinx.coroutines.tasks.await
 
 /**
@@ -23,65 +18,59 @@ import kotlinx.coroutines.tasks.await
  */
 class FirebaseUserApi : UserApi {
 
+    companion object {
+        const val INTERNAL_ERROR_CODE = "USER_NOT_FOUND"
+    }
+
     private val firebaseAuth: FirebaseAuth
         get() = Firebase.auth
 
-    override suspend fun register(credentials: Pair<String, String>): ApiResult<FirebaseUser> = try {
+    override suspend fun register(credentials: Pair<String, String>): UserDto {
         val authResult = firebaseAuth
             .createUserWithEmailAndPassword(credentials.first, credentials.second)
             .await()
         val firebaseUser = authResult.user
         if (firebaseUser != null) {
-            ApiResult.Success(ApiRequestStatus.SUCCESS, firebaseUser)
+            return UserDto(
+                firebaseUser.email,
+                firebaseUser.phoneNumber,
+                firebaseUser.tenantId,
+                firebaseUser.displayName,
+                firebaseUser.isEmailVerified,
+                firebaseUser.photoUrl?.toString()
+            )
         } else {
-            ApiResult.Error(ApiRequestStatus.ERROR_ACCOUNT_DOES_NO_EXIST)
+            throw FirebaseAuthInvalidUserException(
+                INTERNAL_ERROR_CODE,
+                "User not found after registration"
+            )
         }
-    } catch (e: Exception) {
-        ApiResult.Error(getErrorByException(ActionType.REGISTRATION, e))
     }
 
-    override suspend fun login(credentials: Pair<String, String>): ApiResult<FirebaseUser> = try {
+    override suspend fun login(credentials: Pair<String, String>): UserDto {
         val authResult = firebaseAuth
             .signInWithEmailAndPassword(credentials.first, credentials.second)
             .await()
-        val firebaseUser: FirebaseUser? = authResult.user
+        val firebaseUser = authResult.user
         if (firebaseUser != null) {
-            ApiResult.Success(ApiRequestStatus.SUCCESS, firebaseUser)
+            return UserDto(
+                firebaseUser.email,
+                firebaseUser.phoneNumber,
+                firebaseUser.tenantId,
+                firebaseUser.displayName,
+                firebaseUser.isEmailVerified,
+                firebaseUser.photoUrl?.toString()
+            )
         } else {
-            ApiResult.Error(ApiRequestStatus.ERROR_ACCOUNT_DOES_NO_EXIST)
+            throw FirebaseAuthInvalidUserException(
+                INTERNAL_ERROR_CODE,
+                "User not found after login"
+            )
         }
-    } catch (e: Exception) {
-        ApiResult.Error(getErrorByException(ActionType.LOGIN, e))
     }
 
-    override suspend fun logout(): ApiResult<Unit> = try {
-        ApiResult.Success(ApiRequestStatus.SUCCESS, firebaseAuth.signOut())
-    } catch (_: Exception) {
-        ApiResult.Error(ApiRequestStatus.ERROR_UNEXPECTED)
-    }
+    override suspend fun logout() = firebaseAuth.signOut()
 
     override val isAuthenticated: Boolean
         get() = firebaseAuth.currentUser != null
-
-    private fun getErrorByException(actionType: ActionType, authException: Exception): ApiRequestStatus =
-        when {
-            // thrown if the user account corresponding to email does not exist or has been disabled
-            authException is FirebaseAuthInvalidUserException -> ApiRequestStatus.ERROR_ACCOUNT_DOES_NO_EXIST
-            // or if the email or password is invalid
-            authException is FirebaseAuthInvalidCredentialsException && actionType == ActionType.LOGIN -> ApiRequestStatus.ERROR_WRONG_EMAIL_OR_PASSWORD
-            // thrown if the email address is malformed
-            authException is FirebaseAuthInvalidCredentialsException && actionType == ActionType.REGISTRATION -> ApiRequestStatus.ERROR_INCORRECT_EMAIL
-            // thrown if the password is not strong enough
-            authException is FirebaseAuthWeakPasswordException -> ApiRequestStatus.ERROR_WEAK_PASSWORD
-            // thrown if there already exists an account with the given email address
-            authException is FirebaseAuthUserCollisionException -> ApiRequestStatus.ERROR_ACCOUNT_ALREADY_EXISTS
-            else -> ApiRequestStatus.ERROR_UNEXPECTED
-        }
-
-    /**
-     * Firebase action type
-     */
-    private enum class ActionType {
-        LOGIN, REGISTRATION
-    }
 }

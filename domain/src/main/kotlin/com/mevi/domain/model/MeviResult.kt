@@ -1,7 +1,7 @@
-package com.mevi.domain.repository.model
+package com.mevi.domain.model
 
 /**
- * Class to represent the result of an action
+ * Class to represent the result of a Mevi action
  * [Success] or [Error]
  *
  * @author Vadym Volin

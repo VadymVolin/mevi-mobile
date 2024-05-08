@@ -1,14 +1,16 @@
-package com.mevi.domain.repository.user.model
+package com.mevi.data.repository.user.api.model
+
+import com.mevi.domain.repository.user.model.BaseUser
 
 /**
- * Mevi User model class
+ * DTO model to store user data
  *
  * @author Vadym Volin
  * @author midnight85
  *
- * @since 8/5/24
+ * @since 7/5/24
  */
-data class MeviUser(
+data class UserDto(
     override val email: String?,
     override val phoneNumber: String?,
     override val tenantId: String?,

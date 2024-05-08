@@ -1,7 +1,6 @@
 package com.mevi.data.repository.user.api
 
-import com.google.firebase.auth.FirebaseUser
-import com.mevi.data.repository.user.api.model.ApiResult
+import com.mevi.data.repository.user.api.model.UserDto
 
 /**
  * Base interface for user api
@@ -20,7 +19,7 @@ interface UserApi {
      * where [Pair.first] is an email or username
      * and [Pair.second] is a password
      */
-    suspend fun register(credentials: Pair<String, String>): ApiResult<FirebaseUser>
+    suspend fun register(credentials: Pair<String, String>): UserDto
 
 
     /**
@@ -30,16 +29,15 @@ interface UserApi {
      * where [Pair.first] is an email or username
      * and [Pair.second] is a password
      */
-    suspend fun login(credentials: Pair<String, String>): ApiResult<FirebaseUser>
+    suspend fun login(credentials: Pair<String, String>): UserDto
 
     /**
      * Logs out user
      */
-    suspend fun logout(): ApiResult<Unit>
+    suspend fun logout()
 
     /**
      * Returns if user logged in or not
      */
     val isAuthenticated: Boolean
-
 }

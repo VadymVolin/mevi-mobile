@@ -1,17 +1,15 @@
-package com.mevi.data.repository.user.api.model
+package com.mevi.domain.model
 
 /**
- * General API results
+ * General Mevi errors
  *
  * @author Vadym Volin
  * @author midnight85
  *
  * @since 5/5/24
  */
-enum class ApiRequestStatus {
-    SUCCESS,
+enum class MeviError {
     ERROR_UNEXPECTED,
-    // User related errors
     ERROR_ACCOUNT_DOES_NO_EXIST,
     ERROR_ACCOUNT_ALREADY_EXISTS,
     ERROR_WEAK_PASSWORD,

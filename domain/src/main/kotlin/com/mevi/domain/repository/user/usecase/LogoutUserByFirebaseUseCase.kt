@@ -1,7 +1,8 @@
 package com.mevi.domain.repository.user.usecase
 
 import com.mevi.domain.repository.user.UserRepository
-import com.mevi.domain.repository.model.MeviResult
+import com.mevi.domain.model.MeviResult
+import com.mevi.domain.repository.model.RepositoryResult
 
 /**
  * Logs out user via Firebase
@@ -13,5 +14,13 @@ import com.mevi.domain.repository.model.MeviResult
  */
 class LogoutUserByFirebaseUseCase(private val userRepository: UserRepository) :
     BaseNetworkBasedUseCase<MeviResult<Unit>>() {
-    fun logout() = execute { userRepository.logoutByFirebase() }
+    fun logout() = execute {
+        when (val apiResult = userRepository.logoutByFirebase()) {
+            is RepositoryResult.Success -> {
+                MeviResult.Success(Unit)
+            }
+
+            is RepositoryResult.Error -> MeviResult.Error(getErrorByException(apiResult.exception))
+        }
+    }
 }

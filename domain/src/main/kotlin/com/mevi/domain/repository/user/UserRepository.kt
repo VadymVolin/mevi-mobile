@@ -1,7 +1,7 @@
 package com.mevi.domain.repository.user
 
-import com.mevi.domain.repository.model.MeviResult
-import com.mevi.domain.repository.user.model.MeviUser
+import com.mevi.domain.repository.model.RepositoryResult
+import com.mevi.domain.repository.user.model.BaseUser
 
 /**
  * Repository associated with authentication processes and operations
@@ -20,7 +20,7 @@ interface UserRepository {
      * where [Pair.first] is an email or username
      * and [Pair.second] is a password
      */
-    suspend fun registerByFirebase(credentials: Pair<String, String>): MeviResult<MeviUser>
+    suspend fun registerByFirebase(credentials: Pair<String, String>): RepositoryResult<BaseUser>
 
 
     /**
@@ -30,15 +30,17 @@ interface UserRepository {
      * where [Pair.first] is an email or username
      * and [Pair.second] is a password
      */
-    suspend fun loginByFirebase(credentials: Pair<String, String>): MeviResult<MeviUser>
+    suspend fun loginByFirebase(credentials: Pair<String, String>): RepositoryResult<BaseUser>
 
     /**
      * Logs out user
      */
-    suspend fun logoutByFirebase(): MeviResult<Unit>
+    suspend fun logoutByFirebase(): RepositoryResult<Unit>
 
     /**
      * Returns if user logged in or not
      */
     val isAuthenticated: Boolean
+
+    val baseUser: BaseUser?
 }
