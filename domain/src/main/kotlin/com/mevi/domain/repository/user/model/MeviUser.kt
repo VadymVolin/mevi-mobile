@@ -1,4 +1,4 @@
-package com.mevi.domain.repository.auth.model
+package com.mevi.domain.repository.user.model
 
 /**
  * Base holder for app user data

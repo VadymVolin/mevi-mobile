@@ -1,4 +1,4 @@
-package com.mevi.data.repository.auth.api.model
+package com.mevi.data.repository.user.api.model
 
 /**
  * General holder for API request result

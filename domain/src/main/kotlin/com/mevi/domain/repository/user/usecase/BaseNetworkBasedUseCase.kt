@@ -1,4 +1,4 @@
-package com.mevi.domain.repository.auth.usecase
+package com.mevi.domain.repository.user.usecase
 
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow

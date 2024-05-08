@@ -1,8 +1,8 @@
 package com.mevi.di
 
-import com.mevi.domain.repository.auth.usecase.LoginUserByFirebaseUseCase
-import com.mevi.domain.repository.auth.usecase.LogoutUserByFirebaseUseCase
-import com.mevi.domain.repository.auth.usecase.RegisterUserByFirebaseUseCase
+import com.mevi.domain.repository.user.usecase.LoginUserByFirebaseUseCase
+import com.mevi.domain.repository.user.usecase.LogoutUserByFirebaseUseCase
+import com.mevi.domain.repository.user.usecase.RegisterUserByFirebaseUseCase
 import org.koin.dsl.module
 
 /**

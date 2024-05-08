@@ -1,4 +1,4 @@
-package com.mevi.data.repository.auth.api.firebase
+package com.mevi.data.repository.user.api.firebase
 
 import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
@@ -8,9 +8,9 @@ import com.google.firebase.auth.FirebaseAuthUserCollisionException
 import com.google.firebase.auth.FirebaseAuthWeakPasswordException
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.auth
-import com.mevi.data.repository.auth.api.UserApi
-import com.mevi.data.repository.auth.api.model.ApiRequestStatus
-import com.mevi.data.repository.auth.api.model.ApiResult
+import com.mevi.data.repository.user.api.UserApi
+import com.mevi.data.repository.user.api.model.ApiRequestStatus
+import com.mevi.data.repository.user.api.model.ApiResult
 import kotlinx.coroutines.tasks.await
 
 /**

@@ -1,4 +1,4 @@
-package com.mevi.data.repository.auth.api.model
+package com.mevi.data.repository.user.api.model
 
 /**
  * General API results
@@ -11,6 +11,7 @@ package com.mevi.data.repository.auth.api.model
 enum class ApiRequestStatus {
     SUCCESS,
     ERROR_UNEXPECTED,
+    // User related errors
     ERROR_ACCOUNT_DOES_NO_EXIST,
     ERROR_ACCOUNT_ALREADY_EXISTS,
     ERROR_WEAK_PASSWORD,

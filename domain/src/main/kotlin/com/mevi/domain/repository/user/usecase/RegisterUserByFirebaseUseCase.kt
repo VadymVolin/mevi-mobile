@@ -1,7 +1,8 @@
-package com.mevi.domain.repository.auth.usecase
+package com.mevi.domain.repository.user.usecase
 
-import com.mevi.domain.repository.auth.UserRepository
-import com.mevi.domain.repository.model.Result
+import com.mevi.domain.repository.user.UserRepository
+import com.mevi.domain.repository.model.MeviResult
+import com.mevi.domain.repository.user.model.MeviUser
 
 /**
  * Registers user via Firebase
@@ -12,6 +13,6 @@ import com.mevi.domain.repository.model.Result
  * @since 6/5/24
  */
 class RegisterUserByFirebaseUseCase(private val userRepository: UserRepository) :
-    BaseNetworkBasedUseCase<Result<Any>>() {
+    BaseNetworkBasedUseCase<MeviResult<MeviUser>>() {
     fun register(credentials: Pair<String, String>) = execute { userRepository.registerByFirebase(credentials) }
 }

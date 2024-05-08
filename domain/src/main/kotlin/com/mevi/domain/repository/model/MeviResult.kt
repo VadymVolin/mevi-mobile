@@ -9,7 +9,7 @@ package com.mevi.domain.repository.model
  *
  * @since 7/5/24
  */
-sealed class Result<out R> {
-    data class Success<out T>(val data: T) : Result<T>()
-    data class Error<out T>(val error: T) : Result<T>()
+sealed class MeviResult<out R> {
+    data class Success<out T>(val data: T) : MeviResult<T>()
+    data class Error(val error: MeviError) : MeviResult<Nothing>()
 }

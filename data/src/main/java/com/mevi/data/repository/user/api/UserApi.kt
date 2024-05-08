@@ -1,7 +1,7 @@
-package com.mevi.data.repository.auth.api
+package com.mevi.data.repository.user.api
 
 import com.google.firebase.auth.FirebaseUser
-import com.mevi.data.repository.auth.api.model.ApiResult
+import com.mevi.data.repository.user.api.model.ApiResult
 
 /**
  * Base interface for user api

@@ -1,8 +1,8 @@
 package com.mevi.di
 
-import com.mevi.data.repository.auth.UserRepositoryImpl
-import com.mevi.data.repository.auth.api.firebase.FirebaseUserApi
-import com.mevi.domain.repository.auth.UserRepository
+import com.mevi.data.repository.user.UserRepositoryImpl
+import com.mevi.data.repository.user.api.firebase.FirebaseUserApi
+import com.mevi.domain.repository.user.UserRepository
 import org.koin.dsl.module
 
 /**
