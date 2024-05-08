@@ -4,8 +4,6 @@ import android.os.Bundle
 import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.navigation.compose.rememberNavController
 import com.mevi.ui.MainContainerLayout
@@ -15,7 +13,10 @@ import com.mevi.ui.navigation.NavigationRoute
 import com.mevi.ui.startup.standard.OnboardingChaneHandler
 import com.mevi.ui.theme.MeviTheme
 import org.koin.android.ext.android.inject
+import org.koin.androidx.compose.KoinAndroidContext
+import org.koin.core.annotation.KoinExperimentalAPI
 
+@OptIn(KoinExperimentalAPI::class)
 class MainActivity : ComponentActivity() {
 
     companion object {
@@ -33,10 +34,17 @@ class MainActivity : ComponentActivity() {
             initializeNetworkCallback()
         }
         setContent {
-            MeviTheme {
-                navigationComponent.initialize(rememberNavController(), rememberNavController(), rememberNavController(), rememberNavController())
-                MainContainerLayout(navigationComponent)
-                onboardingChaneHandler.execute()
+            KoinAndroidContext() {
+                MeviTheme {
+                    navigationComponent.initialize(
+                        rememberNavController(),
+                        rememberNavController(),
+                        rememberNavController(),
+                        rememberNavController()
+                    )
+                    MainContainerLayout(navigationComponent)
+                    onboardingChaneHandler.execute()
+                }
             }
         }
     }
