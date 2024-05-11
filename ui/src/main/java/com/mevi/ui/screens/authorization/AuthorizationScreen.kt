@@ -2,6 +2,7 @@ package com.mevi.ui.screens.authorization
 
 import android.content.res.Configuration
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
@@ -13,10 +14,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
+import com.mevi.domain.repository.user.model.MeviUser
 import com.mevi.ui.R
 import com.mevi.ui.components.tabs.Tabs
+import com.mevi.ui.screens.state.UIScreenState
 import com.mevi.ui.theme.MeviTheme
-import org.koin.androidx.compose.koinViewModel
+import okhttp3.internal.toImmutableList
 
 enum class TabRoutes(val title: Int) {
     SIGN_IN(R.string.TEXT_SIGN_IN),
@@ -24,33 +27,33 @@ enum class TabRoutes(val title: Int) {
 }
 
 @Composable
-fun AuthorizationScreen(viewModel: AuthorizationViewModel = koinViewModel()) {
-    val loginState = remember { viewModel.loginState }
-    val registrationState = remember { viewModel.registrationState }
+fun AuthorizationScreen(
+    loginState: UIScreenState<MeviUser>,
+    loginAction: (Pair<String, String>) -> Unit,
+    registrationState: UIScreenState<MeviUser>,
+    registrationAction: (Pair<String, String>) -> Unit
+) {
     var selectedTabIndex by remember { mutableIntStateOf(0) }
-    fun onTabClick(index: Int) {
-        selectedTabIndex = index
+    val onTabClickAction = remember {
+        { index: Int ->
+            selectedTabIndex = index
+        }
     }
 
-    val tabTitlesId = TabRoutes.entries.map { it.title }
+    val tabTitlesId: List<Int> = TabRoutes.entries.map { it.title }.toImmutableList()
     Surface {
-        Column(modifier = Modifier.fillMaxWidth()) {
+        Column(modifier = Modifier.fillMaxSize()) {
             Tabs(
                 selectedTabIndex,
                 tabTitlesId,
-                onTabClick = { onTabClick(it) },
+                onTabClick = onTabClickAction,
                 modifier = Modifier
                     .fillMaxWidth(.5f)
                     .align(Alignment.CenterHorizontally)
             )
             when (selectedTabIndex) {
-                0 -> SignInPane(loginState.value) { email: String, password: String ->
-                    viewModel.login(email to password)
-                }
-
-                1 -> SignUpPane(registrationState) { email: String, password: String ->
-                    viewModel.register(email to password)
-                }
+                0 -> SignInPane(loginState, loginAction)
+                1 -> SignUpPane(registrationState, registrationAction)
             }
         }
     }
@@ -69,6 +72,11 @@ fun AuthorizationScreen(viewModel: AuthorizationViewModel = koinViewModel()) {
 @Composable
 fun AuthorizationPreview() {
     MeviTheme {
-        AuthorizationScreen()
+        AuthorizationScreen(
+            UIScreenState(false, null, null),
+            {},
+            UIScreenState(false, null, null),
+            {}
+        )
     }
 }

@@ -1,5 +1,6 @@
 package com.mevi.ui.screens.state
 
+import androidx.compose.runtime.Stable
 import com.mevi.domain.model.MeviError
 
 /**
@@ -10,6 +11,7 @@ import com.mevi.domain.model.MeviError
  *
  * @since 8/5/24
  * */
+@Stable
 data class UIScreenState<T>(
     val isLoading: Boolean = false,
     val data: T? = null,

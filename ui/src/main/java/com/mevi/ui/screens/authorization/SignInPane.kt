@@ -19,17 +19,12 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.focus.FocusRequester
-import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -45,26 +40,31 @@ import com.mevi.ui.components.inputs.FormTextField
 import com.mevi.ui.screens.state.UIScreenState
 
 @Composable
-fun SignInPane(loginState: UIScreenState<MeviUser>, loginAction: (String, String) -> Unit) {
-    var emailValue by rememberSaveable {
+fun SignInPane(
+    loginState: UIScreenState<MeviUser>,
+    loginAction: (Pair<String, String>) -> Unit
+) {
+    val emailValue = rememberSaveable {
         mutableStateOf("")
     }
-    var passwordValue by rememberSaveable {
+    val passwordValue = rememberSaveable {
         mutableStateOf("")
     }
-    fun onEmailValueChange(value: String) {
-        emailValue = value
+    val onEmailValueChange = remember<(value: String) -> Unit> {
+        {
+            emailValue.value = it
+        }
     }
-    fun onPasswordValueChange(value: String) {
-        passwordValue = value
+    val onPasswordValueChange = remember<(value: String) -> Unit> {
+        {
+            passwordValue.value = it
+        }
     }
-    val buttonEnabled by rememberSaveable(emailValue, passwordValue) {
-        mutableStateOf(emailValue.isNotEmpty() && passwordValue.isNotEmpty())
+    val isButtonEnabled =  remember(emailValue.value, passwordValue.value) {
+        mutableStateOf(emailValue.value.isNotEmpty() && passwordValue.value.isNotEmpty())
     }
-    val focusRequester = remember { FocusRequester() }
-    val focusManager = LocalFocusManager.current
     val keyboardController = LocalSoftwareKeyboardController.current
-    
+
     Column(
         modifier = Modifier
             .padding(horizontal = 16.dp)
@@ -75,10 +75,9 @@ fun SignInPane(loginState: UIScreenState<MeviUser>, loginAction: (String, String
         Spacer(modifier = Modifier.height(40.dp))
         Column(modifier = Modifier.fillMaxWidth()) {
             FormTextField(
-                modifier = Modifier.focusRequester(focusRequester),
                 placeholder = stringResource(id = R.string.FORMTEXTFIELD_EMAIL_PLACEHOLDER),
-                value = emailValue,
-                onValueChange = { onEmailValueChange(it) },
+                value = emailValue.value,
+                onValueChange = onEmailValueChange,
                 leadingIcon = Icons.Outlined.Mail,
                 isError = loginState.error != null,
                 errorText = loginState.error?.let { stringResource(id = getErrorText(it)) },
@@ -88,22 +87,21 @@ fun SignInPane(loginState: UIScreenState<MeviUser>, loginAction: (String, String
             )
             Spacer(modifier = Modifier.height(8.dp))
             FormTextField(
-                modifier = Modifier.focusRequester(focusRequester),
                 placeholder = stringResource(id = R.string.FORMTEXTFIELD_PASSWORD_PLACEHOLDER),
                 isPassword = true,
-                value = passwordValue,
-                onValueChange = { onPasswordValueChange(it) },
+                value = passwordValue.value,
+                onValueChange = onPasswordValueChange,
                 isError = loginState.error != null,
                 errorText = loginState.error?.let { stringResource(id = getErrorText(it)) },
                 keyboardOptions = KeyboardOptions.Default.copy(
                     imeAction = ImeAction.Done
-
                 ),
                 keyboardActions = KeyboardActions(onDone = {
                     // Handle button click action here
-                    loginAction(emailValue, passwordValue)
+                    if (isButtonEnabled.value) {
+                        loginAction(emailValue.value to passwordValue.value)
+                    }
                     keyboardController?.hide()
-                    focusManager.clearFocus()
                 })
             )
             Spacer(modifier = Modifier.height(8.dp))
@@ -116,9 +114,11 @@ fun SignInPane(loginState: UIScreenState<MeviUser>, loginAction: (String, String
             }
             Spacer(modifier = Modifier.height(24.dp))
             MeviButton(
-                onClick = { loginAction(emailValue, passwordValue) },
+                onClick = {
+                    loginAction(emailValue.value to passwordValue.value)
+                },
                 text = stringResource(id = R.string.TEXT_SIGN_IN),
-                enabled = buttonEnabled,
+                enabled = isButtonEnabled.value,
             )
             Spacer(modifier = Modifier.height(24.dp))
             Text(
@@ -163,7 +163,7 @@ fun SignInPane(loginState: UIScreenState<MeviUser>, loginAction: (String, String
     }
 }
 
-fun getErrorText(error: MeviError) = when(error) {
+fun getErrorText(error: MeviError) = when (error) {
     MeviError.ERROR_WEAK_PASSWORD -> R.string.ERROR_WEAK_PASSWORD
     MeviError.ERROR_INCORRECT_EMAIL -> R.string.ERROR_INCORRECT_EMAIL
     MeviError.ERROR_ACCOUNT_DOES_NO_EXIST -> R.string.ERROR_ACCOUNT_DOES_NO_EXIST

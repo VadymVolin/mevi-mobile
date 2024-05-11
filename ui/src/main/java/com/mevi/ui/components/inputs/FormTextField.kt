@@ -21,10 +21,8 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.input.PasswordVisualTransformation
@@ -49,12 +47,14 @@ fun FormTextField(
     keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
     keyboardActions: KeyboardActions = KeyboardActions.Default,
 ) {
-    var passwordVisibility: Boolean by remember { mutableStateOf(false) }
-    fun getVisualTransformation(): VisualTransformation {
-        return if (isPassword) {
-            if (passwordVisibility) VisualTransformation.None else PasswordVisualTransformation()
-        } else {
-            VisualTransformation.None
+    val isPasswordVisible = remember { mutableStateOf(false) }
+    val visualTransformation = remember {
+        {
+            if (isPassword) {
+                if (isPasswordVisible.value) VisualTransformation.None else PasswordVisualTransformation()
+            } else {
+                VisualTransformation.None
+            }
         }
     }
 
@@ -94,7 +94,7 @@ fun FormTextField(
             null
         },
         shape = RoundedCornerShape(16.dp),
-        visualTransformation = getVisualTransformation(),
+        visualTransformation = visualTransformation(),
         leadingIcon = {
             leadingIcon?.let {
                 Icon(
@@ -112,9 +112,8 @@ fun FormTextField(
         trailingIcon = if (isPassword && value.isNotEmpty()) {
             {
                 MeviIconButton(
-                    onClick = { passwordVisibility = !passwordVisibility },
-                    icon = if (passwordVisibility) Icons.Outlined.VisibilityOff
-                    else Icons.Outlined.Visibility,
+                    onClick = { isPasswordVisible.value = !isPasswordVisible.value },
+                    icon = if (isPasswordVisible.value) Icons.Outlined.VisibilityOff else Icons.Outlined.Visibility,
                 )
             }
         } else {

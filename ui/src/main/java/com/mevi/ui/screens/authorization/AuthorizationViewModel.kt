@@ -1,6 +1,8 @@
 package com.mevi.ui.screens.authorization
 
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.mevi.domain.model.MeviResult
@@ -26,19 +28,21 @@ class AuthorizationViewModel(
     /**
      * Registration state
      */
-    val registrationState = mutableStateOf(UIScreenState<MeviUser>(false, null, null))
+    var registrationState by mutableStateOf(UIScreenState<MeviUser>(false, null, null))
+        private set
 
     /**
      * Login state
      */
-    var loginState = mutableStateOf(UIScreenState<MeviUser>(false, null, null))
+    var loginState by mutableStateOf(UIScreenState<MeviUser>(false, null, null))
+        private set
 
     fun register(credentials: Pair<String, String>) {
-        registrationState.value = UIScreenState(true, null, null)
+        registrationState = UIScreenState(true, null, null)
         viewModelScope.launch {
             registerUserByFirebaseUseCase.register(credentials)
                 .collect {
-                    registrationState.value = when (it) {
+                    registrationState = when (it) {
                         is MeviResult.Success -> UIScreenState(false, it.data, null)
                         is MeviResult.Error -> UIScreenState(false, null, it.error)
                     }
@@ -47,11 +51,11 @@ class AuthorizationViewModel(
     }
 
     fun login(credentials: Pair<String, String>) {
-        loginState.value = UIScreenState(false, null, null)
+        loginState = UIScreenState(true, null, null)
         viewModelScope.launch {
             loginUserByFirebaseUseCase.login(credentials)
                 .collect {
-                    loginState.value = when (it) {
+                    loginState = when (it) {
                         is MeviResult.Success -> UIScreenState(false, it.data, null)
                         is MeviResult.Error -> UIScreenState(false, null, it.error)
                     }
