@@ -30,7 +30,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
-import com.mevi.domain.model.MeviError
 import com.mevi.domain.repository.user.model.MeviUser
 import com.mevi.ui.R
 import com.mevi.ui.components.WelcomeSection
@@ -80,7 +79,7 @@ fun SignInPane(
                 onValueChange = onEmailValueChange,
                 leadingIcon = Icons.Outlined.Mail,
                 isError = loginState.error != null,
-                errorText = loginState.error?.let { stringResource(id = getErrorText(it)) },
+                errorText = loginState.error?.let { stringResource(id = getErrorText(FieldType.EMAIL, it)) },
                 keyboardOptions = KeyboardOptions.Default.copy(
                     imeAction = ImeAction.Next
                 )
@@ -92,7 +91,7 @@ fun SignInPane(
                 value = passwordValue.value,
                 onValueChange = onPasswordValueChange,
                 isError = loginState.error != null,
-                errorText = loginState.error?.let { stringResource(id = getErrorText(it)) },
+                errorText = loginState.error?.let { stringResource(id = getErrorText(FieldType.PASSWORD, it)) },
                 keyboardOptions = KeyboardOptions.Default.copy(
                     imeAction = ImeAction.Done
                 ),
@@ -161,13 +160,4 @@ fun SignInPane(
             }
         }
     }
-}
-
-fun getErrorText(error: MeviError) = when (error) {
-    MeviError.ERROR_WEAK_PASSWORD -> R.string.ERROR_WEAK_PASSWORD
-    MeviError.ERROR_INCORRECT_EMAIL -> R.string.ERROR_INCORRECT_EMAIL
-    MeviError.ERROR_ACCOUNT_DOES_NO_EXIST -> R.string.ERROR_ACCOUNT_DOES_NO_EXIST
-    MeviError.ERROR_ACCOUNT_ALREADY_EXISTS -> R.string.ERROR_ACCOUNT_ALREADY_EXISTS
-    MeviError.ERROR_WRONG_EMAIL_OR_PASSWORD -> R.string.ERROR_WRONG_EMAIL_OR_PASSWORD
-    MeviError.ERROR_UNEXPECTED -> R.string.ERROR_UNEXPECTED
 }

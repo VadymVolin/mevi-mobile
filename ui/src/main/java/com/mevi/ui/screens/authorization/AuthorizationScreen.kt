@@ -14,6 +14,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
+import com.mevi.domain.model.MeviError
 import com.mevi.domain.repository.user.model.MeviUser
 import com.mevi.ui.R
 import com.mevi.ui.components.tabs.Tabs
@@ -57,6 +58,26 @@ fun AuthorizationScreen(
             }
         }
     }
+}
+
+enum class FieldType {
+    EMAIL, PASSWORD
+}
+
+fun getErrorText(fieldType: FieldType, error: MeviError) = when {
+    fieldType == FieldType.EMAIL && error == MeviError.ERROR_WEAK_PASSWORD -> 0
+    fieldType == FieldType.PASSWORD && error == MeviError.ERROR_WEAK_PASSWORD -> R.string.ERROR_WEAK_PASSWORD
+    fieldType == FieldType.EMAIL && error == MeviError.ERROR_INCORRECT_EMAIL -> R.string.ERROR_INCORRECT_EMAIL
+    fieldType == FieldType.PASSWORD && error == MeviError.ERROR_INCORRECT_EMAIL -> 0
+    fieldType == FieldType.EMAIL && error == MeviError.ERROR_ACCOUNT_DOES_NO_EXIST -> R.string.ERROR_ACCOUNT_DOES_NO_EXIST
+    fieldType == FieldType.PASSWORD && error == MeviError.ERROR_ACCOUNT_DOES_NO_EXIST -> 0
+    fieldType == FieldType.EMAIL && error == MeviError.ERROR_ACCOUNT_ALREADY_EXISTS -> R.string.ERROR_ACCOUNT_ALREADY_EXISTS
+    fieldType == FieldType.PASSWORD && error == MeviError.ERROR_ACCOUNT_ALREADY_EXISTS -> 0
+    fieldType == FieldType.EMAIL && error == MeviError.ERROR_WRONG_EMAIL_OR_PASSWORD -> R.string.ERROR_WRONG_EMAIL
+    fieldType == FieldType.PASSWORD && error == MeviError.ERROR_WRONG_EMAIL_OR_PASSWORD -> R.string.ERROR_WRONG_PASSWORD
+    fieldType == FieldType.EMAIL && error == MeviError.ERROR_UNEXPECTED -> R.string.ERROR_UNEXPECTED
+    fieldType == FieldType.PASSWORD && error == MeviError.ERROR_UNEXPECTED -> R.string.ERROR_UNEXPECTED
+    else -> R.string.ERROR_UNEXPECTED
 }
 
 
