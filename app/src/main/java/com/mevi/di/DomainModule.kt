@@ -1,5 +1,6 @@
 package com.mevi.di
 
+import com.mevi.domain.repository.user.usecase.CheckUserAuthorizationByFirebaseUseCase
 import com.mevi.domain.repository.user.usecase.LoginUserByFirebaseUseCase
 import com.mevi.domain.repository.user.usecase.LogoutUserByFirebaseUseCase
 import com.mevi.domain.repository.user.usecase.RegisterUserByFirebaseUseCase
@@ -17,4 +18,5 @@ val domainModule = module {
     factory { LoginUserByFirebaseUseCase(get()) }
     factory { RegisterUserByFirebaseUseCase(get()) }
     factory { LogoutUserByFirebaseUseCase(get()) }
+    factory { CheckUserAuthorizationByFirebaseUseCase(get()) }
 }

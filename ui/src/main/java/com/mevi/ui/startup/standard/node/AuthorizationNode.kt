@@ -8,6 +8,6 @@ class AuthorizationNode(
     private val navigationComponent: NavigationComponent
 ) : ChainNode() {
     override fun execute() {
-        navigationComponent.showDialog(NavigationRoute.ROUTE_DIALOG_AUTHORIZATION_DIALOG, ::complete)
+        navigationComponent.navigate(NavigationRoute.AUTHORIZATION_GRAPH)
     }
 }

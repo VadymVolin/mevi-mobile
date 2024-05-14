@@ -21,7 +21,7 @@ import androidx.compose.ui.unit.sp
 import com.mevi.ui.R
 import com.mevi.ui.components.buttons.MeviButton
 import com.mevi.ui.navigation.NavigationComponent
-import com.mevi.ui.navigation.NavigationRoute
+import com.mevi.ui.navigation.NavigationGraphRoute
 import org.koin.compose.koinInject
 
 
@@ -70,7 +70,7 @@ fun NoInternetConnectionAlert(
                 Log.d(TAG, "Start checking network connection")
                 if (networkManager.isInternetConnectionAvailable()) {
                     Log.d(TAG, "Network is available, close the alert")
-                    navigationComponent.closeAlert(NavigationRoute.ROUTE_ALERT_NO_INTERNET)
+                    navigationComponent.closeScreen(NavigationGraphRoute.ROUTE_ALERT_NO_INTERNET)
                 } else {
                     Log.d(TAG, "Network is not available, keep showing the alert")
                     return@MeviButton

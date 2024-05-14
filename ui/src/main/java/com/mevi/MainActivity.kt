@@ -6,10 +6,10 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.navigation.compose.rememberNavController
-import com.mevi.ui.MainContainerLayout
+import com.mevi.ui.AppLayout
 import com.mevi.ui.internet.NetworkManager
 import com.mevi.ui.navigation.NavigationComponent
-import com.mevi.ui.navigation.NavigationRoute
+import com.mevi.ui.navigation.NavigationGraphRoute
 import com.mevi.ui.startup.standard.OnboardingChaneHandler
 import com.mevi.ui.theme.MeviTheme
 import org.koin.android.ext.android.inject
@@ -36,14 +36,11 @@ class MainActivity : ComponentActivity() {
         setContent {
             KoinAndroidContext() {
                 MeviTheme {
-                    navigationComponent.initialize(
-                        rememberNavController(),
-                        rememberNavController(),
-                        rememberNavController(),
-                        rememberNavController()
+                    navigationComponent.initialize(rememberNavController())
+                    AppLayout(
+                        navigationComponent,
+                        onboardingChaneHandler
                     )
-                    MainContainerLayout(navigationComponent)
-                    onboardingChaneHandler.execute()
                 }
             }
         }
@@ -69,7 +66,7 @@ class MainActivity : ComponentActivity() {
     private fun onInternetUnavailable() {
         runOnUiThread {
             Log.d(TAG, "Internet connection has been lost")
-            navigationComponent.showAlert(NavigationRoute.ROUTE_ALERT_NO_INTERNET)
+            navigationComponent.navigate(NavigationGraphRoute.ROUTE_ALERT_NO_INTERNET)
         }
     }
 }

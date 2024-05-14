@@ -3,6 +3,7 @@ package com.mevi.di
 import com.mevi.ui.internet.NetworkManager
 import com.mevi.ui.navigation.NavigationComponent
 import com.mevi.ui.screens.authorization.AuthorizationViewModel
+import com.mevi.ui.screens.loading.StartViewModel
 import com.mevi.ui.startup.standard.OnboardingChaneHandler
 import org.koin.android.ext.koin.androidContext
 import org.koin.androidx.viewmodel.dsl.viewModel
@@ -21,4 +22,5 @@ val uiModule = module {
     single { NavigationComponent() }
     single { OnboardingChaneHandler(get(), get()) }
     viewModel { AuthorizationViewModel(get(), get()) }
+    viewModel { StartViewModel(get()) }
 }

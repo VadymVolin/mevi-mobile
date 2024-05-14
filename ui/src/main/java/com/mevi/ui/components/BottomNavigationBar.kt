@@ -16,12 +16,12 @@ import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.compose.currentBackStackEntryAsState
 import com.mevi.ui.R
 import com.mevi.ui.navigation.NavigationComponent
-import com.mevi.ui.navigation.NavigationRoute
+import com.mevi.ui.navigation.NavigationGraphRoute
 
 @Composable
 fun BottomNavigationBar(
-    bottomRoutes: Array<NavigationRoute> = arrayOf(
-        NavigationRoute.ROUTE_SCREEN_CHATS, NavigationRoute.ROUTE_SCREEN_RANDOM_CALL, NavigationRoute.ROUTE_SCREEN_ACCOUNT
+    bottomRoutes: Array<NavigationGraphRoute> = arrayOf(
+        NavigationGraphRoute.ROUTE_SCREEN_CHATS, NavigationGraphRoute.ROUTE_SCREEN_RANDOM_CALL, NavigationGraphRoute.ROUTE_SCREEN_ACCOUNT
     ),
     navigationComponent: NavigationComponent
 ) =
@@ -32,21 +32,21 @@ fun BottomNavigationBar(
                 icon = { Icon(getIconByRoute(item), contentDescription = item.route) },
                 label = { Text(stringResource(id = getTextIdByRoute(item))) },
                 selected = navBackStackEntry?.destination?.hierarchy?.any { it.route == item.route } == true,
-                onClick = { navigationComponent.showScreen(item) }
+                onClick = { navigationComponent.navigate(item) }
             )
         }
     }
 
-fun getTextIdByRoute(route: NavigationRoute) = when (route) {
-    NavigationRoute.ROUTE_SCREEN_CHATS -> R.string.TEXT_CHATS_ROUTE
-    NavigationRoute.ROUTE_SCREEN_RANDOM_CALL -> R.string.TEXT_RANDOM_CALL_ROUTE
-    NavigationRoute.ROUTE_SCREEN_ACCOUNT -> R.string.TEXT_ACCOUNT_ROUTE
+fun getTextIdByRoute(route: NavigationGraphRoute) = when (route) {
+    NavigationGraphRoute.ROUTE_SCREEN_CHATS -> R.string.TEXT_CHATS_ROUTE
+    NavigationGraphRoute.ROUTE_SCREEN_RANDOM_CALL -> R.string.TEXT_RANDOM_CALL_ROUTE
+    NavigationGraphRoute.ROUTE_SCREEN_ACCOUNT -> R.string.TEXT_ACCOUNT_ROUTE
     else -> R.string.N_A
 }
 
-fun getIconByRoute(route: NavigationRoute) = when (route) {
-    NavigationRoute.ROUTE_SCREEN_CHATS -> Icons.AutoMirrored.Filled.Chat
-    NavigationRoute.ROUTE_SCREEN_RANDOM_CALL -> Icons.Filled.VideoCall
-    NavigationRoute.ROUTE_SCREEN_ACCOUNT -> Icons.Filled.ManageAccounts
+fun getIconByRoute(route: NavigationGraphRoute) = when (route) {
+    NavigationGraphRoute.ROUTE_SCREEN_CHATS -> Icons.AutoMirrored.Filled.Chat
+    NavigationGraphRoute.ROUTE_SCREEN_RANDOM_CALL -> Icons.Filled.VideoCall
+    NavigationGraphRoute.ROUTE_SCREEN_ACCOUNT -> Icons.Filled.ManageAccounts
     else -> Icons.Filled.Error
 }

@@ -36,12 +36,16 @@ import com.mevi.ui.components.WelcomeSection
 import com.mevi.ui.components.buttons.MeviButton
 import com.mevi.ui.components.buttons.MeviIconButton
 import com.mevi.ui.components.inputs.FormTextField
+import com.mevi.ui.navigation.NavigationComponent
+import com.mevi.ui.navigation.NavigationGraphRoute
 import com.mevi.ui.screens.state.UIScreenState
+import org.koin.compose.koinInject
 
 @Composable
 fun SignInPane(
     loginState: UIScreenState<MeviUser>,
-    loginAction: (Pair<String, String>) -> Unit
+    loginAction: (Pair<String, String>) -> Unit,
+    forgotPasswordAction: () -> Unit
 ) {
     val emailValue = rememberSaveable {
         mutableStateOf("")
@@ -104,11 +108,15 @@ fun SignInPane(
                 })
             )
             Spacer(modifier = Modifier.height(8.dp))
-            TextButton(modifier = Modifier.align(Alignment.End), onClick = { /*TODO*/ }) {
+            TextButton(modifier = Modifier.align(Alignment.End), onClick = {
+                if (loginState.data != null) {
+                    forgotPasswordAction()
+                }
+            }) {
                 Text(
                     text = stringResource(id = R.string.TEXT_FORGOT_PASSWORD),
                     style = MaterialTheme.typography.titleSmall,
-                    fontWeight = FontWeight.Medium
+                    fontWeight = FontWeight.Medium,
                 )
             }
             Spacer(modifier = Modifier.height(24.dp))

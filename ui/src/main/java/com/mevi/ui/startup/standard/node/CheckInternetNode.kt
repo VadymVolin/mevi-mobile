@@ -3,7 +3,7 @@ package com.mevi.ui.startup.standard.node
 import com.mevi.common.chain.node.ChainNode
 import com.mevi.ui.internet.NetworkManager
 import com.mevi.ui.navigation.NavigationComponent
-import com.mevi.ui.navigation.NavigationRoute
+import com.mevi.ui.navigation.NavigationGraphRoute
 
 /**
  * Checks internet connection
@@ -26,7 +26,7 @@ class CheckInternetNode(
         if (networkManager.isInternetConnectionAvailable()) {
             complete()
         } else {
-            navigationComponent.showAlert(NavigationRoute.ROUTE_ALERT_NO_INTERNET, ::complete)
+            navigationComponent.navigate(NavigationGraphRoute.ROUTE_ALERT_NO_INTERNET, ::complete)
         }
     }
 

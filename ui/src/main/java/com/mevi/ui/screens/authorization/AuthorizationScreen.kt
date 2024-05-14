@@ -32,7 +32,8 @@ fun AuthorizationScreen(
     loginState: UIScreenState<MeviUser>,
     loginAction: (Pair<String, String>) -> Unit,
     registrationState: UIScreenState<MeviUser>,
-    registrationAction: (Pair<String, String>) -> Unit
+    registrationAction: (Pair<String, String>) -> Unit,
+    forgotPasswordAction: () -> Unit
 ) {
     var selectedTabIndex by remember { mutableIntStateOf(0) }
     val onTabClickAction = remember {
@@ -53,7 +54,7 @@ fun AuthorizationScreen(
                     .align(Alignment.CenterHorizontally)
             )
             when (selectedTabIndex) {
-                0 -> SignInPane(loginState, loginAction)
+                0 -> SignInPane(loginState, loginAction, forgotPasswordAction)
                 1 -> SignUpPane(registrationState, registrationAction)
             }
         }
@@ -97,6 +98,7 @@ fun AuthorizationPreview() {
             UIScreenState(false, null, null),
             {},
             UIScreenState(false, null, null),
+            {},
             {}
         )
     }
