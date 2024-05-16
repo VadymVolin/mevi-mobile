@@ -19,9 +19,9 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -36,38 +36,26 @@ import com.mevi.ui.components.WelcomeSection
 import com.mevi.ui.components.buttons.MeviButton
 import com.mevi.ui.components.buttons.MeviIconButton
 import com.mevi.ui.components.inputs.FormTextField
-import com.mevi.ui.navigation.NavigationComponent
-import com.mevi.ui.navigation.NavigationGraphRoute
 import com.mevi.ui.screens.state.UIScreenState
-import org.koin.compose.koinInject
 
 @Composable
 fun SignInPane(
+    emailValue: MutableState<String>,
+    onEmailValueChange: (String) -> Unit,
+    passwordValue: MutableState<String>,
+    onPasswordValueChange: (String) -> Unit,
     loginState: UIScreenState<MeviUser>,
     loginAction: (Pair<String, String>) -> Unit,
-    forgotPasswordAction: () -> Unit
+    forgotPasswordAction: () -> Unit,
+    isButtonEnabled: Boolean
 ) {
-    val emailValue = rememberSaveable {
-        mutableStateOf("")
-    }
-    val passwordValue = rememberSaveable {
-        mutableStateOf("")
-    }
-    val onEmailValueChange = remember<(value: String) -> Unit> {
-        {
-            emailValue.value = it
-        }
-    }
-    val onPasswordValueChange = remember<(value: String) -> Unit> {
-        {
-            passwordValue.value = it
-        }
-    }
-    val isButtonEnabled =  remember(emailValue.value, passwordValue.value) {
-        mutableStateOf(emailValue.value.isNotEmpty() && passwordValue.value.isNotEmpty())
-    }
     val keyboardController = LocalSoftwareKeyboardController.current
-
+    val emailErrorStringId = remember(loginState.error) {
+        mutableIntStateOf(loginState.error?.let { getErrorText(FieldType.EMAIL, it) } ?: 0)
+    }
+    val passwordErrorStringId = remember(loginState.error) {
+        mutableIntStateOf(loginState.error?.let { getErrorText(FieldType.PASSWORD, it) } ?: 0)
+    }
     Column(
         modifier = Modifier
             .padding(horizontal = 16.dp)
@@ -82,8 +70,8 @@ fun SignInPane(
                 value = emailValue.value,
                 onValueChange = onEmailValueChange,
                 leadingIcon = Icons.Outlined.Mail,
-                isError = loginState.error != null,
-                errorText = loginState.error?.let { stringResource(id = getErrorText(FieldType.EMAIL, it)) },
+                isError = emailErrorStringId.intValue > 0,
+                errorText = if (emailErrorStringId.intValue > 0) stringResource(id = emailErrorStringId.intValue) else null,
                 keyboardOptions = KeyboardOptions.Default.copy(
                     imeAction = ImeAction.Next
                 )
@@ -94,14 +82,14 @@ fun SignInPane(
                 isPassword = true,
                 value = passwordValue.value,
                 onValueChange = onPasswordValueChange,
-                isError = loginState.error != null,
-                errorText = loginState.error?.let { stringResource(id = getErrorText(FieldType.PASSWORD, it)) },
+                isError = passwordErrorStringId.intValue > 0,
+                errorText = if (passwordErrorStringId.intValue > 0) stringResource(id = passwordErrorStringId.intValue) else null,
                 keyboardOptions = KeyboardOptions.Default.copy(
                     imeAction = ImeAction.Done
                 ),
                 keyboardActions = KeyboardActions(onDone = {
                     // Handle button click action here
-                    if (isButtonEnabled.value) {
+                    if (isButtonEnabled) {
                         loginAction(emailValue.value to passwordValue.value)
                     }
                     keyboardController?.hide()
@@ -109,9 +97,7 @@ fun SignInPane(
             )
             Spacer(modifier = Modifier.height(8.dp))
             TextButton(modifier = Modifier.align(Alignment.End), onClick = {
-                if (loginState.data != null) {
-                    forgotPasswordAction()
-                }
+                forgotPasswordAction()
             }) {
                 Text(
                     text = stringResource(id = R.string.TEXT_FORGOT_PASSWORD),
@@ -125,7 +111,7 @@ fun SignInPane(
                     loginAction(emailValue.value to passwordValue.value)
                 },
                 text = stringResource(id = R.string.TEXT_SIGN_IN),
-                enabled = isButtonEnabled.value,
+                enabled = isButtonEnabled,
             )
             Spacer(modifier = Modifier.height(24.dp))
             Text(

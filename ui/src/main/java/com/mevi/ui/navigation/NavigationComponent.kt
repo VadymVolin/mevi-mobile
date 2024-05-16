@@ -90,7 +90,6 @@ class NavigationComponent {
             if (wasDestinationPopped.or(destinationRoute != null)
                     .and(route.route == destinationRoute)
             ) {
-                println("FORTRA " + route.route)
                 navigationCallback[destinationRoute]?.invoke()
             }
             Log.d(getTag(), "navigateBack: ${route.route}, was popped: $wasDestinationPopped")

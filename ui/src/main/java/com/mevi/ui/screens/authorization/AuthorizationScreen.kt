@@ -8,7 +8,9 @@ import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -41,8 +43,23 @@ fun AuthorizationScreen(
             selectedTabIndex = index
         }
     }
-
     val tabTitlesId: List<Int> = TabRoutes.entries.map { it.title }.toImmutableList()
+    // sign in fields
+    val emailValue = rememberSaveable {
+        mutableStateOf("")
+    }
+    val passwordValue = rememberSaveable {
+        mutableStateOf("")
+    }
+    val onEmailValueChange = { value: String ->
+        emailValue.value = value
+    }
+    val onPasswordValueChange = { value: String ->
+        passwordValue.value = value
+    }
+    val isButtonEnabled =  remember(emailValue.value, passwordValue.value) {
+        mutableStateOf(emailValue.value.isNotEmpty() && passwordValue.value.isNotEmpty())
+    }
     Surface {
         Column(modifier = Modifier.fillMaxSize()) {
             Tabs(
@@ -54,7 +71,7 @@ fun AuthorizationScreen(
                     .align(Alignment.CenterHorizontally)
             )
             when (selectedTabIndex) {
-                0 -> SignInPane(loginState, loginAction, forgotPasswordAction)
+                0 -> SignInPane(emailValue, onEmailValueChange, passwordValue, onPasswordValueChange, loginState, loginAction, forgotPasswordAction, isButtonEnabled.value)
                 1 -> SignUpPane(registrationState, registrationAction)
             }
         }

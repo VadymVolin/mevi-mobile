@@ -51,23 +51,22 @@ fun ScreenNavigationHost(
         updateAppBarsVisibility(false)
         val viewModel: StartViewModel = koinViewModel<StartViewModel>()
         val checkAuthorizationAction = remember {
-            {
-                viewModel.checkUserAuthorization()
-            }
+            { viewModel.checkUserAuthorization() }
         }
         val onAuthorizedAction = remember {
-            {
-                navigationComponent.navigate(NavigationRoute.MAIN_APPLICATION_GRAPH)
-            }
+            { navigationComponent.navigate(NavigationRoute.MAIN_APPLICATION_GRAPH) }
         }
         val onUnauthorizedAction = remember {
-            {
-                navigationComponent.navigate(NavigationRoute.AUTHORIZATION_GRAPH)
-            }
+            { navigationComponent.navigate(NavigationRoute.AUTHORIZATION_GRAPH) }
         }
-        StartScreen(viewModel.accountState, checkAuthorizationAction, onAuthorizedAction, onUnauthorizedAction, startStartup = {
+        StartScreen(
+            viewModel.accountState,
+            checkAuthorizationAction,
+            onAuthorizedAction,
+            onUnauthorizedAction
+        ) {
             onboardingChaneHandler.execute()
-        })
+        }
     }
 
     // authorization nested graph
@@ -79,20 +78,10 @@ fun ScreenNavigationHost(
         composable(NavigationGraphRoute.ROUTE_AUTHORIZATION.route) {
             updateAppBarsVisibility(false)
             val viewModel: AuthorizationViewModel = it.sharedViewModel<AuthorizationViewModel>(navigationComponent.getScreenNavController())
-            val loginAction = remember {
-                { credentials: Pair<String, String> ->
-                    viewModel.login(credentials)
-                }
-            }
-            val registrationAction = remember {
-                { credentials: Pair<String, String> ->
-                    viewModel.register(credentials)
-                }
-            }
+            val loginAction = remember { viewModel::login }
+            val registrationAction = remember { viewModel::register }
             val forgotPasswordAction = remember {
-                {
-                    navigationComponent.navigate(NavigationGraphRoute.ROUTE_FORGOT_PASSWORD)
-                }
+                { navigationComponent.navigate(NavigationGraphRoute.ROUTE_FORGOT_PASSWORD) }
             }
             AuthorizationScreen(viewModel.loginState, loginAction, viewModel.registrationState, registrationAction, forgotPasswordAction)
         }
