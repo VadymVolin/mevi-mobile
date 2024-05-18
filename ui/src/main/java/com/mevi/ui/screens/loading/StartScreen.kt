@@ -11,6 +11,8 @@ import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
@@ -25,11 +27,19 @@ import com.mevi.ui.theme.MeviTheme
 @Composable
 fun StartScreen(
     state: UIScreenState<Boolean>,
+    checkInternet: () -> Boolean,
+    onInternetUnavailable: (callback: () -> Unit) -> Unit,
     checkAuthorization: () -> Unit,
     onUserAuthorized: () -> Unit,
     onUserUnauthorized: () -> Unit,
-    startStartup: () -> Unit
+    initializeGlobalNetworkCallback: () -> Unit,
 ) {
+    val internetState = rememberSaveable {
+        mutableStateOf(checkInternet())
+    }
+    val onInternetRestored = {
+        internetState.value = true
+    }
     Column(
         modifier = Modifier.fillMaxSize(),
         verticalArrangement = Arrangement.Center,
@@ -39,21 +49,28 @@ fun StartScreen(
             painter = painterResource(id = R.drawable.ic_splash),
             contentDescription = stringResource(R.string.LOGO_CONTENT_DESCRIPTION)
         )
-        Text(text = "Loading...")
+        Text(text = stringResource(R.string.LOADING_TEXT))
         Spacer(modifier = Modifier.height(10.dp))
         CircularProgressIndicator()
-//        if (state.data != null && !state.isLoading) {
-//            if (state.data) {
-//                onUserAuthorized()
-//            } else {
-//                onUserUnauthorized()
-//            }
-//        }
-        LaunchedEffect(Unit) {
-            startStartup()
+        if (internetState.value) {
+            initializeGlobalNetworkCallback()
+            if (state.data != null && !state.isLoading) {
+                if (state.data) {
+                    onUserAuthorized()
+                } else {
+                    onUserUnauthorized()
+                }
+            } else {
+                LaunchedEffect(Unit) {
+                    checkAuthorization()
+                }
+            }
+        } else {
+            onInternetUnavailable {
+                onInternetRestored()
+            }
         }
     }
-
 }
 
 @Preview(
@@ -69,15 +86,9 @@ fun StartScreen(
 fun LoadingScreenPreview() {
     MeviTheme {
         StartScreen(
-            UIScreenState(
-                false,
-                null,
-                null
-            ),
-            {},
-            {},
-            {},
-            {}
+            UIScreenState(false, null, null),
+            { false },
+            {}, {}, {}, {}, {}
         )
     }
 }

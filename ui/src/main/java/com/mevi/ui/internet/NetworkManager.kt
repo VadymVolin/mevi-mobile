@@ -61,6 +61,7 @@ class NetworkManager(context: Context) {
 
     fun registerNetworkCallbacks(callbackTag: String, onAvailable: (() -> Unit)?, onUnavailable: (() -> Unit)?) {
         Log.d(TAG, "Add network callback for: $callbackTag")
+        networkCallbacks.remove(callbackTag)
         networkCallbacks[callbackTag] = object : ConnectivityManager.NetworkCallback() {
             override fun onAvailable(network: Network) {
                 onAvailable?.invoke()
@@ -79,5 +80,9 @@ class NetworkManager(context: Context) {
     fun unregisterNetworkCallbacks(callbackTag: String) {
         Log.d(TAG, "Remove network callback for: $callbackTag")
         networkCallbacks.remove(callbackTag)
+    }
+
+    fun release() {
+        connectivityManager.unregisterNetworkCallback(mainNetworkCallback)
     }
 }

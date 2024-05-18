@@ -25,4 +25,5 @@
     <string name="ERROR_ACCOUNT_ALREADY_EXISTS">Account this email already exists</string>
     <string name="ERROR_UNEXPECTED">Something went wrong</string>
     <string name="ERROR_WRONG_EMAIL">Your email is wrong</string>
+    <string name="LOADING_TEXT">Loading...</string>
 </resources>

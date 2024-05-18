@@ -16,14 +16,15 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import com.mevi.ui.components.BottomNavigationBar
+import com.mevi.ui.internet.NetworkManager
 import com.mevi.ui.navigation.NavigationComponent
 import com.mevi.ui.navigation.host.ScreenNavigationHost
-import com.mevi.ui.startup.standard.OnboardingChaneHandler
 
 @Composable
 fun AppLayout(
+    networkManager: NetworkManager,
     navigationComponent: NavigationComponent,
-    onboardingChaneHandler: OnboardingChaneHandler
+    initializeGlobalNetworkCallback: () -> Unit
 ) {
     val showAppBars = rememberSaveable {
         mutableStateOf(false)
@@ -45,8 +46,9 @@ fun AppLayout(
                 .windowInsetsPadding(
                     WindowInsets.safeDrawing.only(WindowInsetsSides.Horizontal),
                 ),
+            networkManager = networkManager,
             navigationComponent = navigationComponent,
-            onboardingChaneHandler = onboardingChaneHandler,
+            initializeGlobalNetworkCallback = initializeGlobalNetworkCallback,
             updateAppBarsVisibility = { shouldShowAppBars: Boolean ->
                 showAppBars.value = shouldShowAppBars
             }

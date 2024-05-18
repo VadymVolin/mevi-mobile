@@ -16,12 +16,14 @@ import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.compose.currentBackStackEntryAsState
 import com.mevi.ui.R
 import com.mevi.ui.navigation.NavigationComponent
-import com.mevi.ui.navigation.NavigationGraphRoute
+import com.mevi.ui.navigation.Route
 
 @Composable
 fun BottomNavigationBar(
-    bottomRoutes: Array<NavigationGraphRoute> = arrayOf(
-        NavigationGraphRoute.ROUTE_SCREEN_CHATS, NavigationGraphRoute.ROUTE_SCREEN_RANDOM_CALL, NavigationGraphRoute.ROUTE_SCREEN_ACCOUNT
+    bottomRoutes: Array<Route> = arrayOf(
+        Route.Menu.ROUTE_SCREEN_CHATS,
+        Route.Menu.ROUTE_SCREEN_RANDOM_CALL,
+        Route.Menu.ROUTE_SCREEN_ACCOUNT
     ),
     navigationComponent: NavigationComponent
 ) =
@@ -37,16 +39,16 @@ fun BottomNavigationBar(
         }
     }
 
-fun getTextIdByRoute(route: NavigationGraphRoute) = when (route) {
-    NavigationGraphRoute.ROUTE_SCREEN_CHATS -> R.string.TEXT_CHATS_ROUTE
-    NavigationGraphRoute.ROUTE_SCREEN_RANDOM_CALL -> R.string.TEXT_RANDOM_CALL_ROUTE
-    NavigationGraphRoute.ROUTE_SCREEN_ACCOUNT -> R.string.TEXT_ACCOUNT_ROUTE
+fun getTextIdByRoute(route: Route) = when (route) {
+    Route.Menu.ROUTE_SCREEN_CHATS -> R.string.TEXT_CHATS_ROUTE
+    Route.Menu.ROUTE_SCREEN_RANDOM_CALL -> R.string.TEXT_RANDOM_CALL_ROUTE
+    Route.Menu.ROUTE_SCREEN_ACCOUNT -> R.string.TEXT_ACCOUNT_ROUTE
     else -> R.string.N_A
 }
 
-fun getIconByRoute(route: NavigationGraphRoute) = when (route) {
-    NavigationGraphRoute.ROUTE_SCREEN_CHATS -> Icons.AutoMirrored.Filled.Chat
-    NavigationGraphRoute.ROUTE_SCREEN_RANDOM_CALL -> Icons.Filled.VideoCall
-    NavigationGraphRoute.ROUTE_SCREEN_ACCOUNT -> Icons.Filled.ManageAccounts
+fun getIconByRoute(route: Route) = when (route) {
+    Route.Menu.ROUTE_SCREEN_CHATS -> Icons.AutoMirrored.Filled.Chat
+    Route.Menu.ROUTE_SCREEN_RANDOM_CALL -> Icons.Filled.VideoCall
+    Route.Menu.ROUTE_SCREEN_ACCOUNT -> Icons.Filled.ManageAccounts
     else -> Icons.Filled.Error
 }

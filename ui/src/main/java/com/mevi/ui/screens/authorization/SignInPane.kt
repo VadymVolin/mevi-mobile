@@ -47,8 +47,12 @@ fun SignInPane(
     loginState: UIScreenState<MeviUser>,
     loginAction: (Pair<String, String>) -> Unit,
     forgotPasswordAction: () -> Unit,
-    isButtonEnabled: Boolean
+    isButtonEnabled: Boolean,
+    onAuthenticated: () -> Unit
 ) {
+    if (loginState.data != null) {
+        onAuthenticated()
+    }
     val keyboardController = LocalSoftwareKeyboardController.current
     val emailErrorStringId = remember(loginState.error) {
         mutableIntStateOf(loginState.error?.let { getErrorText(FieldType.EMAIL, it) } ?: 0)

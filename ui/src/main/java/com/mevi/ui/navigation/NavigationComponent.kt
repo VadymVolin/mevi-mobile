@@ -2,10 +2,8 @@ package com.mevi.ui.navigation
 
 import android.util.Log
 import androidx.navigation.NavDestination.Companion.hierarchy
-import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import com.mevi.ui.navigation.NavigationComponent.ScreenNavigator
-import kotlinx.coroutines.flow.map
 
 /**
  * Navigation component,
@@ -33,19 +31,19 @@ class NavigationComponent {
         screenNavigator = ScreenNavigator(screenNavController)
     }
 
-    fun navigate(route: NavigationGraphRoute) {
+    fun navigate(route: Route) {
         screenNavigator.navigate(route)
     }
 
-    fun navigate(route: NavigationGraphRoute, onClose: () -> Unit) {
+    fun navigate(route: Route, onClose: () -> Unit) {
         screenNavigator.navigate(route, onClose)
     }
 
-    fun navigate(route: NavigationRoute) {
+    fun navigate(route: Graph) {
         screenNavigator.navigate(route)
     }
 
-    fun navigate(route: NavigationRoute, onClose: () -> Unit) {
+    fun navigate(route: Graph, onClose: () -> Unit) {
         screenNavigator.navigate(route, onClose)
     }
 
@@ -53,7 +51,7 @@ class NavigationComponent {
         screenNavigator.navigateBack()
     }
 
-    fun closeScreen(route: NavigationGraphRoute) {
+    fun closeScreen(route: Route) {
         screenNavigator.navigateBack(route)
     }
 
@@ -83,7 +81,7 @@ class NavigationComponent {
             Log.d(getTag(), "navigateBack, was popped: $wasDestinationPopped")
         }
 
-        fun navigateBack(route: NavigationGraphRoute) {
+        fun navigateBack(route: Route) {
             val destinationRoute = getNavController().currentDestination?.route
             val wasDestinationPopped =
                 getNavController().popBackStack(route.route, inclusive = true)
@@ -99,7 +97,43 @@ class NavigationComponent {
 
         fun getNavController(): NavHostController = navController
 
-        fun navigate(route: NavigationGraphRoute) {
+        fun navigate(route: Route) {
+            Log.d(TAG, "navigate: ${route.route}")
+            val currentDestination = navController.currentDestination
+            if (currentDestination?.hierarchy?.any { it.route == route.route } != true) {
+                navController.navigate(route.route) {
+                    // Pop up to the start destination of the graph to
+                    // avoid building up a large stack of destinations
+                    // on the back stack as users select items
+                    if (route.removeLastRoute) {
+                        when (route) {
+                            Route.Menu.ROUTE_SCREEN_CHATS, Route.Menu.ROUTE_SCREEN_RANDOM_CALL,
+                            Route.Menu.ROUTE_SCREEN_ACCOUNT, Route.Startup.ROUTE_AUTHORIZATION -> {
+                                popUpTo(0) {
+                                    inclusive = true
+                                }
+                            }
+
+                            else -> {
+                                currentDestination?.route?.let {
+                                    popUpTo(it) {
+                                        inclusive = true
+                                    }
+                                }
+                            }
+                        }
+
+                    }
+                    // Avoid multiple copies of the same destination when
+                    // re-selecting the same item
+                    launchSingleTop = true
+                    // Restore state when re-selecting a previously selected item
+                    restoreState = true
+                }
+            }
+        }
+
+        fun navigate(route: Graph) {
             Log.d(TAG, "navigate: ${route.route}")
             val currentDestination = navController.currentDestination
             if (currentDestination?.hierarchy?.any { it.route == route.route } != true) {
@@ -109,7 +143,6 @@ class NavigationComponent {
                     // on the back stack as users select items
                     popUpTo(0) {
                         inclusive = true
-                        saveState = true
                     }
                     // Avoid multiple copies of the same destination when
                     // re-selecting the same item
@@ -120,32 +153,12 @@ class NavigationComponent {
             }
         }
 
-        fun navigate(route: NavigationRoute) {
-            Log.d(TAG, "navigate: ${route.route}")
-            val currentDestination = navController.currentDestination
-            if (currentDestination?.hierarchy?.any { it.route == route.route } != true) {
-                navController.navigate(route.route) {
-                    // Pop up to the start destination of the graph to
-                    // avoid building up a large stack of destinations
-                    // on the back stack as users select items
-                    popUpTo(navController.graph.findStartDestination().id) {
-                        inclusive = true
-                    }
-                    // Avoid multiple copies of the same destination when
-                    // re-selecting the same item
-                    launchSingleTop = true
-                    // Restore state when re-selecting a previously selected item
-                    restoreState = true
-                }
-            }
-        }
-
-        fun navigate(route: NavigationGraphRoute, onClose: () -> Unit) {
+        fun navigate(route: Route, onClose: () -> Unit) {
             navigationCallback[route.route] = onClose
             navigate(route)
         }
 
-        fun navigate(route: NavigationRoute, onClose: () -> Unit) {
+        fun navigate(route: Graph, onClose: () -> Unit) {
             navigationCallback[route.route] = onClose
             navigate(route)
         }

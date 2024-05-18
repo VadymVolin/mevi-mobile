@@ -9,8 +9,7 @@ import androidx.navigation.compose.rememberNavController
 import com.mevi.ui.AppLayout
 import com.mevi.ui.internet.NetworkManager
 import com.mevi.ui.navigation.NavigationComponent
-import com.mevi.ui.navigation.NavigationGraphRoute
-import com.mevi.ui.startup.standard.OnboardingChaneHandler
+import com.mevi.ui.navigation.Route
 import com.mevi.ui.theme.MeviTheme
 import org.koin.android.ext.android.inject
 import org.koin.androidx.compose.KoinAndroidContext
@@ -25,30 +24,33 @@ class MainActivity : ComponentActivity() {
 
     private val networkManager: NetworkManager by inject()
     private val navigationComponent: NavigationComponent by inject()
-    private val onboardingChaneHandler: OnboardingChaneHandler by inject()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         installSplashScreen()
-        onboardingChaneHandler.setFinalNode {
-            initializeNetworkCallback()
-        }
         setContent {
             KoinAndroidContext() {
                 MeviTheme {
                     navigationComponent.initialize(rememberNavController())
-                    AppLayout(
-                        navigationComponent,
-                        onboardingChaneHandler
-                    )
+                    AppLayout(networkManager, navigationComponent, ::initializeNetworkCallback)
                 }
             }
         }
     }
 
+    override fun onRestart() {
+        super.onRestart()
+        initializeNetworkCallback()
+    }
+
     override fun onStop() {
         super.onStop()
         releaseNetworkManager()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        networkManager.release()
     }
 
     private fun initializeNetworkCallback() {
@@ -66,7 +68,7 @@ class MainActivity : ComponentActivity() {
     private fun onInternetUnavailable() {
         runOnUiThread {
             Log.d(TAG, "Internet connection has been lost")
-            navigationComponent.navigate(NavigationGraphRoute.ROUTE_ALERT_NO_INTERNET)
+            navigationComponent.navigate(Route.Dialog.ROUTE_ALERT_NO_INTERNET)
         }
     }
 }
