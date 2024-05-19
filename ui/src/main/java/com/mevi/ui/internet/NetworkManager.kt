@@ -22,31 +22,30 @@ class NetworkManager(context: Context) {
 
     private val networkCallbacks = mutableMapOf<String, ConnectivityManager.NetworkCallback>()
 
-    private val mainNetworkCallback: ConnectivityManager.NetworkCallback
-
-    init {
-        mainNetworkCallback = object : ConnectivityManager.NetworkCallback() {
-            override fun onAvailable(network: Network) {
-                Log.d(TAG, "Network connection is available")
-                networkCallbacks.values.forEach {
-                    it.onAvailable(network)
-                }
-            }
-
-            override fun onLost(network: Network) {
-                Log.d(TAG, "Network connection is lost")
-                networkCallbacks.values.forEach {
-                    it.onLost(network)
-                }
-            }
-
-            override fun onUnavailable() {
-                Log.d(TAG, "Network connection is unavailable")
-                networkCallbacks.values.forEach {
-                    it.onUnavailable()
-                }
+    private val mainNetworkCallback: ConnectivityManager.NetworkCallback = object : ConnectivityManager.NetworkCallback() {
+        override fun onAvailable(network: Network) {
+            Log.d(TAG, "Network connection is available")
+            networkCallbacks.values.forEach {
+                it.onAvailable(network)
             }
         }
+
+        override fun onLost(network: Network) {
+            Log.d(TAG, "Network connection is lost")
+            networkCallbacks.values.forEach {
+                it.onLost(network)
+            }
+        }
+
+        override fun onUnavailable() {
+            Log.d(TAG, "Network connection is unavailable")
+            networkCallbacks.values.forEach {
+                it.onUnavailable()
+            }
+        }
+    }
+
+    init {
         connectivityManager.registerDefaultNetworkCallback(mainNetworkCallback)
     }
 
@@ -62,6 +61,7 @@ class NetworkManager(context: Context) {
 
     fun registerNetworkCallbacks(callbackTag: String, onAvailable: (() -> Unit)?, onUnavailable: (() -> Unit)?) {
         Log.d(TAG, "Add network callback for: $callbackTag")
+        networkCallbacks.remove(callbackTag)
         networkCallbacks[callbackTag] = object : ConnectivityManager.NetworkCallback() {
             override fun onAvailable(network: Network) {
                 onAvailable?.invoke()
@@ -80,5 +80,9 @@ class NetworkManager(context: Context) {
     fun unregisterNetworkCallbacks(callbackTag: String) {
         Log.d(TAG, "Remove network callback for: $callbackTag")
         networkCallbacks.remove(callbackTag)
+    }
+
+    fun release() {
+        connectivityManager.unregisterNetworkCallback(mainNetworkCallback)
     }
 }

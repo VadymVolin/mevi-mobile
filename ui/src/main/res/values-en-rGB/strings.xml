@@ -17,4 +17,13 @@
     <string name="TEXT_SIGN_IN">Sign in</string>
     <string name="TEXT_FORGOT_PASSWORD">Forgot password?</string>
     <string name="TEXT_OR_SIGN_IN_WITH">Or sign in with</string>
+    <string name="ERROR_INCORRECT_PASSWORD">Your password is incorrect</string>
+    <string name="ERROR_INCORRECT_EMAIL">Your email is incorrect</string>
+    <string name="ERROR_WEAK_PASSWORD">Your password is weak</string>
+    <string name="ERROR_WRONG_PASSWORD">Your password is wrong</string>
+    <string name="ERROR_ACCOUNT_DOES_NO_EXIST">Account doesn\'t exist</string>
+    <string name="ERROR_ACCOUNT_ALREADY_EXISTS">Account this email already exists</string>
+    <string name="ERROR_UNEXPECTED">Something went wrong</string>
+    <string name="ERROR_WRONG_EMAIL">Your email is wrong</string>
+    <string name="LOADING_TEXT">Loading...</string>
 </resources>

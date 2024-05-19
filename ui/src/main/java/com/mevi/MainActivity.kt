@@ -4,18 +4,18 @@ import android.os.Bundle
 import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.navigation.compose.rememberNavController
-import com.mevi.ui.MainContainerLayout
+import com.mevi.ui.AppLayout
 import com.mevi.ui.internet.NetworkManager
 import com.mevi.ui.navigation.NavigationComponent
-import com.mevi.ui.navigation.NavigationRoute
-import com.mevi.ui.startup.standard.OnboardingChaneHandler
+import com.mevi.ui.navigation.Route
 import com.mevi.ui.theme.MeviTheme
 import org.koin.android.ext.android.inject
+import org.koin.androidx.compose.KoinAndroidContext
+import org.koin.core.annotation.KoinExperimentalAPI
 
+@OptIn(KoinExperimentalAPI::class)
 class MainActivity : ComponentActivity() {
 
     companion object {
@@ -24,26 +24,33 @@ class MainActivity : ComponentActivity() {
 
     private val networkManager: NetworkManager by inject()
     private val navigationComponent: NavigationComponent by inject()
-    private val onboardingChaneHandler: OnboardingChaneHandler by inject()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         installSplashScreen()
         setContent {
-            MeviTheme {
-                navigationComponent.initialize(rememberNavController(), rememberNavController(), rememberNavController(), rememberNavController())
-                onboardingChaneHandler.setFinalNode {
-                    initializeNetworkCallback()
+            KoinAndroidContext() {
+                MeviTheme {
+                    navigationComponent.initialize(rememberNavController())
+                    AppLayout(networkManager, navigationComponent, ::initializeNetworkCallback)
                 }
-                MainContainerLayout(navigationComponent)
-                onboardingChaneHandler.execute()
             }
         }
+    }
+
+    override fun onRestart() {
+        super.onRestart()
+        initializeNetworkCallback()
     }
 
     override fun onStop() {
         super.onStop()
         releaseNetworkManager()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        networkManager.release()
     }
 
     private fun initializeNetworkCallback() {
@@ -61,14 +68,7 @@ class MainActivity : ComponentActivity() {
     private fun onInternetUnavailable() {
         runOnUiThread {
             Log.d(TAG, "Internet connection has been lost")
-            navigationComponent.showAlert(NavigationRoute.ROUTE_ALERT_NO_INTERNET)
+            navigationComponent.navigate(Route.Dialog.ROUTE_ALERT_NO_INTERNET)
         }
-    }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun GreetingPreview() {
-    MeviTheme {
     }
 }

@@ -53,6 +53,7 @@ android {
 dependencies {
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
+    implementation(libs.androidx.coroutines.ktx)
     implementation(libs.androidx.activity.compose)
     implementation(platform(libs.androidx.compose.bom))
     implementation(libs.androidx.ui)
@@ -68,11 +69,13 @@ dependencies {
     // firebase
     implementation(platform(libs.firebase.bom))
     implementation(libs.firebase.analytics)
+    implementation(libs.firebase.auth)
 
     //di
     implementation(libs.koin.androidx.compose)
     //navigation
     implementation(libs.androidx.navigation.compose)
+    implementation(libs.androidx.viewmodel.compose)
 
     //modules
     implementation(project(":domain"))
