@@ -12,7 +12,7 @@ interface BaseUser {
     val email: String?
     val phoneNumber: String?
     val tenantId: String?
-    val displayName: String?
+    val name: String?
     val isEmailVerified: Boolean
     val photoUrl: String?
 }

@@ -23,7 +23,7 @@ class LoginUserByFirebaseUseCase(private val userRepository: UserRepository) :
                         apiResult.data.email,
                         apiResult.data.phoneNumber,
                         apiResult.data.tenantId,
-                        apiResult.data.displayName,
+                        apiResult.data.name,
                         apiResult.data.isEmailVerified,
                         apiResult.data.photoUrl
                     )

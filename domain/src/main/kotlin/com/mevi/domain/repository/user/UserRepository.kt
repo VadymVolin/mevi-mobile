@@ -38,6 +38,14 @@ interface UserRepository {
     suspend fun logoutByFirebase(): RepositoryResult<Unit>
 
     /**
+     * Updates user profile
+     *
+         * @param name new user name, may be null, if null the old name will be used
+     * @param avatarUrl url of the new user avatar, may be null
+     */
+    suspend fun updateProfileByFirebase(name: String?, avatarUrl: String?): RepositoryResult<Unit>
+
+    /**
      * Returns if user logged in or not
      */
     val isAuthenticated: Boolean

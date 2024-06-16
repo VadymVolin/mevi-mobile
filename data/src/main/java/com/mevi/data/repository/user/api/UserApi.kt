@@ -23,7 +23,7 @@ interface UserApi {
 
 
     /**
-     * Login to user account
+     * Logins to user account
      *
      * @param credentials user [Pair] credentials,
      * where [Pair.first] is an email or username
@@ -35,6 +35,14 @@ interface UserApi {
      * Logs out user
      */
     suspend fun logout()
+
+    /**
+     * Updates user profile
+     *
+     * @param name new user name, may be null
+     * @param avatarUrl url of the new user avatar, may be null
+     */
+    suspend fun updateProfile(name: String?, avatarUrl: String?)
 
     /**
      * Returns if user logged in or not

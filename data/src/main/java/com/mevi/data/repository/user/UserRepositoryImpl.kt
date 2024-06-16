@@ -52,6 +52,15 @@ class UserRepositoryImpl(private val firebaseAuthApi: UserApi) : UserRepository 
         RepositoryResult.Error(getRepositoryException(e))
     }
 
+    override suspend fun updateProfileByFirebase(
+        name: String?,
+        avatarUrl: String?
+    ): RepositoryResult<Unit> = try {
+        RepositoryResult.Success(firebaseAuthApi.updateProfile(name ?: accountData.userDto?.name, avatarUrl))
+    } catch (e: Exception) {
+        RepositoryResult.Error(getRepositoryException(e))
+    }
+
     override val isAuthenticated: Boolean
         get() = isAuthenticatedByFirebase
 
