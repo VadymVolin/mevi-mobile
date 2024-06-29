@@ -1,9 +1,11 @@
 package com.mevi.ui.screens.authorization
 
 import android.content.res.Configuration
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -19,6 +21,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import com.mevi.domain.model.MeviError
 import com.mevi.domain.repository.user.model.MeviUser
 import com.mevi.ui.R
+import androidx.compose.ui.unit.dp
 import com.mevi.ui.components.tabs.Tabs
 import com.mevi.ui.screens.state.UIScreenState
 import com.mevi.ui.theme.MeviTheme
@@ -38,7 +41,7 @@ fun AuthorizationScreen(
     forgotPasswordAction: () -> Unit,
     onAuthenticated: () -> Unit
 ) {
-    var selectedTabIndex by remember { mutableIntStateOf(0) }
+    var selectedTabIndex by remember { mutableIntStateOf(1) }
     val onTabClickAction = remember {
         { index: Int ->
             selectedTabIndex = index
@@ -71,9 +74,16 @@ fun AuthorizationScreen(
                     .fillMaxWidth(.5f)
                     .align(Alignment.CenterHorizontally)
             )
+            Column(
+                modifier = Modifier
+//                    .padding(horizontal = 16.dp)
+                    .fillMaxSize(),
+                verticalArrangement = Arrangement.Center
+            ) {
             when (selectedTabIndex) {
                 0 -> SignInPane(emailValue, onEmailValueChange, passwordValue, onPasswordValueChange, loginState, loginAction, forgotPasswordAction, isButtonEnabled.value, onAuthenticated)
                 1 -> SignUpPane(registrationState, registrationAction)
+            }
             }
         }
     }

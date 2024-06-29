@@ -7,6 +7,7 @@ import androidx.compose.material.icons.filled.CheckBox
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.LocalContentColor
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -31,7 +32,7 @@ fun MeviIconButton(
 
 @Composable
 fun MeviIconButton(
-    modifier: Modifier = Modifier, onClick: () -> Unit, icon: ImageVector, iconColor: Color = LocalContentColor.current
+    modifier: Modifier = Modifier, onClick: () -> Unit, icon: ImageVector, iconColor: Color = MaterialTheme.colorScheme.onSurface
 ) {
     IconButton(
         onClick = onClick, modifier = modifier then Modifier.size(32.dp)
