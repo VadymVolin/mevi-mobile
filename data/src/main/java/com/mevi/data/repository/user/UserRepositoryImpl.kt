@@ -56,7 +56,15 @@ class UserRepositoryImpl(private val firebaseAuthApi: UserApi) : UserRepository 
         name: String?,
         avatarUrl: String?
     ): RepositoryResult<Unit> = try {
-        RepositoryResult.Success(firebaseAuthApi.updateProfile(name ?: accountData.userDto?.name, avatarUrl))
+        RepositoryResult.Success(firebaseAuthApi.updateProfilePublicData(name ?: accountData.userDto?.name, avatarUrl))
+    } catch (e: Exception) {
+        RepositoryResult.Error(getRepositoryException(e))
+    }
+
+    override suspend fun updateProfileEmailByFirebase(
+        email: String
+    ): RepositoryResult<Unit> = try {
+        RepositoryResult.Success(firebaseAuthApi.updateEmail(email))
     } catch (e: Exception) {
         RepositoryResult.Error(getRepositoryException(e))
     }

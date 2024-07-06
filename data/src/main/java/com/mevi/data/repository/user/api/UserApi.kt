@@ -42,7 +42,14 @@ interface UserApi {
      * @param name new user name, may be null
      * @param avatarUrl url of the new user avatar, may be null
      */
-    suspend fun updateProfile(name: String?, avatarUrl: String?)
+    suspend fun updateProfilePublicData(name: String?, avatarUrl: String?)
+
+    /**
+     * Updates user profile e-mail
+     *
+     * @param email new user email
+     */
+    suspend fun updateEmail(email: String)
 
     /**
      * Returns if user logged in or not

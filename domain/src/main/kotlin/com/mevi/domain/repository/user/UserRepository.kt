@@ -40,10 +40,17 @@ interface UserRepository {
     /**
      * Updates user profile
      *
-         * @param name new user name, may be null, if null the old name will be used
+     * @param name new user name, may be null, if null the old name will be used
      * @param avatarUrl url of the new user avatar, may be null
      */
     suspend fun updateProfileByFirebase(name: String?, avatarUrl: String?): RepositoryResult<Unit>
+
+    /**
+     * Updates user profile e-mail
+     *
+     * @param email new user email
+     */
+    suspend fun updateProfileEmailByFirebase(email: String): RepositoryResult<Unit>
 
     /**
      * Returns if user logged in or not

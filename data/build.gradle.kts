@@ -12,6 +12,10 @@ android {
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles("consumer-rules.pro")
+
+        // TODO:  Vadym Volin, midnight85 please change this info later
+        buildConfigField("String", "APP_PACKAGE_NAME", "\"com.mevi.mobile\"")
+        buildConfigField("String", "APP_URL", "\"https://google.com\"")
     }
 
     buildTypes {
@@ -38,6 +42,7 @@ android {
     kotlinOptions {
         jvmTarget = "17"
     }
+    buildFeatures { buildConfig = true }
 }
 
 dependencies {

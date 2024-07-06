@@ -3,15 +3,16 @@ package com.mevi.data.repository.user.api.firebase
 import android.net.Uri
 import android.util.Log
 import com.google.firebase.Firebase
+import com.google.firebase.auth.ActionCodeSettings
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseAuth.AuthStateListener
 import com.google.firebase.auth.FirebaseAuthInvalidUserException
 import com.google.firebase.auth.auth
 import com.google.firebase.auth.userProfileChangeRequest
+import com.mevi.data.BuildConfig
 import com.mevi.data.repository.user.api.UserApi
 import com.mevi.data.repository.user.api.model.UserDto
 import kotlinx.coroutines.tasks.await
-import java.io.IOException
 
 /**
  * Firebase implementation of [UserApi]
@@ -33,13 +34,14 @@ class FirebaseUserApi : UserApi {
         get() = Firebase.auth
 
     private val firebaseAuthStateListener = AuthStateListener {
-        Log.d(TAG, "Authentication state has been changed \nold: [$firebaseAuth] \nnew: [$it]")
+        Log.d(TAG, "Authentication state has been changed, isAuthenticated: [${isAuthenticated}]")
     }
 
     init {
         firebaseAuth.addAuthStateListener(firebaseAuthStateListener)
     }
 
+    @Throws(FirebaseAuthInvalidUserException::class)
     override suspend fun register(credentials: Pair<String, String>): UserDto {
         val authResult = firebaseAuth
             .createUserWithEmailAndPassword(credentials.first, credentials.second)
@@ -62,6 +64,7 @@ class FirebaseUserApi : UserApi {
         }
     }
 
+    @Throws(FirebaseAuthInvalidUserException::class)
     override suspend fun login(credentials: Pair<String, String>): UserDto {
         val authResult = firebaseAuth
             .signInWithEmailAndPassword(credentials.first, credentials.second)
@@ -84,15 +87,33 @@ class FirebaseUserApi : UserApi {
         }
     }
 
-    override suspend fun logout() = firebaseAuth.signOut()
-
     @Throws(FirebaseAuthInvalidUserException::class)
-    override suspend fun updateProfile(name: String?, avatarUrl: String?) {
+    override suspend fun updateProfilePublicData(name: String?, avatarUrl: String?) {
         firebaseAuth.currentUser?.updateProfile(userProfileChangeRequest {
             this.displayName = name
             this.photoUri = Uri.parse(avatarUrl)
-        })?.await() ?: throw FirebaseAuthInvalidUserException(INTERNAL_ERROR_CODE, "User is not authorized")
+        })?.await() ?: throw FirebaseAuthInvalidUserException(
+            INTERNAL_ERROR_CODE,
+            "User is not authorized"
+        )
     }
+
+    @Throws(FirebaseAuthInvalidUserException::class)
+    override suspend fun updateEmail(email: String) {
+        val actionCodeSettings = ActionCodeSettings.newBuilder()
+            .setAndroidPackageName(BuildConfig.APP_PACKAGE_NAME, false, "1.0")
+            .setIOSBundleId(null)
+            .setUrl(BuildConfig.APP_URL)
+            .build()
+        firebaseAuth.currentUser
+            ?.verifyBeforeUpdateEmail(email, actionCodeSettings)
+            ?.await() ?: throw FirebaseAuthInvalidUserException(
+            INTERNAL_ERROR_CODE,
+            "User is not authorized"
+        )
+    }
+
+    override suspend fun logout() = firebaseAuth.signOut()
 
     override val isAuthenticated: Boolean
         get() = firebaseAuth.currentUser != null
