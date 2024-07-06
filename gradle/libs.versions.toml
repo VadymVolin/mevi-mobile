@@ -10,16 +10,17 @@ composeBomVersion = "2024.06.00"
 coreKtxVersion = "1.13.1"
 kotlinxCoroutinesKtxVersion = "1.8.0"
 coreSplashscreenVersion = "1.0.1"
-espressoCoreVersion = "3.5.1"
+espressoCoreVersion = "3.6.1"
 junitVersion = "4.13.2"
-junitExtVersion = "1.1.5"
+junitExtVersion = "1.2.1"
 koinAndroidxComposeVersion = "3.5.6"
-lifecycleRuntimeKtxVersion = "2.8.2"
-composeLifecycleViewModelVersion = "2.8.2"
+lifecycleRuntimeKtxVersion = "2.8.3"
+composeLifecycleViewModelVersion = "2.8.3"
 materialIconsExtendedVersion = "1.6.8"
 navigationComposeVersion = "2.7.7"
 googleGmsVersion = "4.4.2"
-firebaseBomVersion = "33.1.0"
+firebaseBomVersion = "33.1.1"
+playServicesAuthVersion = "21.2.0"
 
 
 [libraries]
@@ -48,6 +49,7 @@ coil-compose = { module = "io.coil-kt:coil-compose", version.ref = "coilComposeV
 firebase-bom = { module = "com.google.firebase:firebase-bom", version.ref = "firebaseBomVersion" }
 firebase-analytics = { module = "com.google.firebase:firebase-analytics" }
 firebase-auth = { module = "com.google.firebase:firebase-auth" }
+play-services-auth = { module = "com.google.android.gms:play-services-auth", version.ref = "playServicesAuthVersion" }
 
 
 [plugins]

@@ -12,7 +12,12 @@
           "package_name": "com.mevi.mobile"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "688998092838-bo9ln4vmu1c1g0ueousoj74b5g18m010.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyBOvQ59MiZpBxImgmfV-Gxnl-iHVX8wxto"
@@ -20,7 +25,12 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "688998092838-bo9ln4vmu1c1g0ueousoj74b5g18m010.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
         }
       }
     }
