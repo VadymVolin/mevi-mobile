@@ -21,7 +21,6 @@ interface UserApi {
      */
     suspend fun register(credentials: Pair<String, String>): UserDto
 
-
     /**
      * Logins to user account
      *
@@ -30,6 +29,11 @@ interface UserApi {
      * and [Pair.second] is a password
      */
     suspend fun login(credentials: Pair<String, String>): UserDto
+
+    /**
+     * Logins with google account
+     */
+    suspend fun loginWithGoogle(googleTokenId: String): UserDto
 
     /**
      * Logs out user

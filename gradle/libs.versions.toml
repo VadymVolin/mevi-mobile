@@ -1,14 +1,14 @@
 [versions]
 compileSdk = "34"
 minSdk = "26"
-kotlinCompilerExtensionVersion = "1.5.5"
-androidGradlePluginVersion = "8.5.0"
-kotlinAndroidVersion = "1.9.20"
+kotlinCompilerExtensionVersion = "1.5.14" # to update this please use the following link: https://developer.android.com/jetpack/androidx/releases/compose-kotlin and update kotlinAndroidVersion too
+androidGradlePluginVersion = "8.5.1"
+kotlinAndroidVersion = "1.9.24"
 activityComposeVersion = "1.9.0"
 coilComposeVersion = "2.6.0"
 composeBomVersion = "2024.06.00"
 coreKtxVersion = "1.13.1"
-kotlinxCoroutinesKtxVersion = "1.8.0"
+kotlinxCoroutinesKtxVersion = "1.8.1"
 coreSplashscreenVersion = "1.0.1"
 espressoCoreVersion = "3.6.1"
 junitVersion = "4.13.2"
@@ -19,7 +19,7 @@ composeLifecycleViewModelVersion = "2.8.3"
 materialIconsExtendedVersion = "1.6.8"
 navigationComposeVersion = "2.7.7"
 googleGmsVersion = "4.4.2"
-firebaseBomVersion = "33.1.1"
+firebaseBomVersion = "33.1.2"
 playServicesAuthVersion = "21.2.0"
 
 

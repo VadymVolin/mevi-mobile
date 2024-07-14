@@ -2,11 +2,13 @@ package com.mevi.data.repository.user.api.firebase
 
 import android.net.Uri
 import android.util.Log
+import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.firebase.Firebase
 import com.google.firebase.auth.ActionCodeSettings
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseAuth.AuthStateListener
 import com.google.firebase.auth.FirebaseAuthInvalidUserException
+import com.google.firebase.auth.GoogleAuthProvider
 import com.google.firebase.auth.auth
 import com.google.firebase.auth.userProfileChangeRequest
 import com.mevi.data.BuildConfig
@@ -69,6 +71,28 @@ class FirebaseUserApi : UserApi {
         val authResult = firebaseAuth
             .signInWithEmailAndPassword(credentials.first, credentials.second)
             .await()
+        val firebaseUser = authResult.user
+        if (firebaseUser != null) {
+            return UserDto(
+                firebaseUser.email,
+                firebaseUser.phoneNumber,
+                firebaseUser.tenantId,
+                firebaseUser.displayName,
+                firebaseUser.isEmailVerified,
+                firebaseUser.photoUrl?.toString()
+            )
+        } else {
+            throw FirebaseAuthInvalidUserException(
+                INTERNAL_ERROR_CODE,
+                "User not found after login"
+            )
+        }
+    }
+
+    @Throws(FirebaseAuthInvalidUserException::class)
+    override suspend fun loginWithGoogle(googleTokenId: String): UserDto {
+        val credential = GoogleAuthProvider.getCredential(googleTokenId, null)
+        val authResult = firebaseAuth.signInWithCredential(credential).await()
         val firebaseUser = authResult.user
         if (firebaseUser != null) {
             return UserDto(
