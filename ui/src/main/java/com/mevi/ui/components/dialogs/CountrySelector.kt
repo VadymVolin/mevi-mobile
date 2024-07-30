@@ -21,6 +21,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -33,7 +34,6 @@ import com.mevi.ui.components.buttons.MeviIconButton
 import com.mevi.ui.model.CountryModel
 import com.mevi.ui.utils.CountriesUtils
 
-@SuppressLint("MutableCollectionMutableState")
 @Composable
 fun CountrySelector(
     selectedCountry: CountryModel?,
@@ -41,21 +41,24 @@ fun CountrySelector(
     onDismissRequest: (() -> Unit)? = null
 ) {
     val searchText = rememberSaveable { mutableStateOf("") }
-    val countries = remember { mutableStateOf(CountriesUtils.getCountries()) }
+    val countries =
+        remember { mutableStateListOf<CountryModel>().apply { addAll(CountriesUtils.getCountries()) } }
 
     val filteredCountries = remember(searchText.value) {
-        mutableStateOf(
-            if (searchText.value.isEmpty()) {
-                countries.value
-            } else {
-                ArrayList(countries.value.filter {
-                    it.countryName.contains(
-                        searchText.value,
-                        ignoreCase = true
-                    )
-                })
-            }
-        )
+        mutableStateListOf<CountryModel>().apply {
+            addAll(
+                if (searchText.value.isEmpty()) {
+                    countries.toList()
+                } else {
+                    countries.toMutableList().filter {
+                        it.countryName.contains(
+                            searchText.value,
+                            ignoreCase = true
+                        )
+                    }
+                }
+            )
+        }
     }
     Column(
         Modifier
@@ -96,7 +99,7 @@ fun CountrySelector(
             )
         )
         Spacer(modifier = Modifier.height(16.dp))
-        if (filteredCountries.value.isEmpty()) {
+        if (filteredCountries.isEmpty()) {
             NoMatchesSection()
         } else {
             Text(
@@ -109,10 +112,10 @@ fun CountrySelector(
             LazyColumn(
                 contentPadding = PaddingValues(8.dp),
             ) {
-                items(filteredCountries.value, itemContent = { country ->
+                items(filteredCountries, itemContent = { country ->
                     DialogListItem(
                         icon = country.flag,
-                        name = country.countryName,
+                        itemText = country.countryName,
                         searchString = searchText.value,
                         onClick = { onSelectCountry(country) },
                         selectedItem = selectedCountry?.countryName

@@ -4,7 +4,6 @@ package com.mevi.ui.screens.authorization
 import android.util.Log
 import android.view.Gravity
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -19,7 +18,6 @@ import androidx.compose.material.icons.filled.Language
 import androidx.compose.material.icons.filled.Transgender
 import androidx.compose.material.icons.outlined.Mail
 import androidx.compose.material.icons.outlined.Person
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -53,8 +51,6 @@ import com.mevi.ui.model.CountryModel
 import com.mevi.ui.model.GenderModel
 import com.mevi.ui.screens.state.UIScreenState
 
-
-@OptIn(ExperimentalMaterial3Api::class, ExperimentalLayoutApi::class)
 @Composable
 fun SignUpPane(
     registrationState: UIScreenState<MeviUser>, registrationAction: (Pair<String, String>) -> Unit
@@ -136,9 +132,6 @@ fun SignUpPane(
     fun onRepeatPasswordValueChange(value: String) {
         repeatPasswordValue.value = value
     }
-
-
-
 
     if (countryPopupVisibility) {
         MeviDialog(dialogGravity = Gravity.TOP, onDismissRequest = { hideCountryPopup() }) {
@@ -239,18 +232,3 @@ fun SignUpPane(
 
     }
 }
-
-
-//@Preview(showBackground = true, device = Devices.PIXEL_6_PRO)
-//@Preview(
-//    showBackground = true,
-//    uiMode = Configuration.UI_MODE_NIGHT_YES,
-//    device = Devices.PIXEL_6_PRO
-//)
-//@Composable
-//fun SimpleComposablePreview() {
-//    MeviTheme {
-//
-//        SignIn()
-//    }
-//}

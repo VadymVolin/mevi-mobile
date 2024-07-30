@@ -61,7 +61,7 @@ fun AuthorizationScreen(
     val onPasswordValueChange = { value: String ->
         passwordValue.value = value
     }
-    val isButtonEnabled =  remember(emailValue.value, passwordValue.value) {
+    val isButtonEnabled = remember(emailValue.value, passwordValue.value) {
         mutableStateOf(emailValue.value.isNotEmpty() && passwordValue.value.isNotEmpty())
     }
     Surface {
@@ -76,14 +76,24 @@ fun AuthorizationScreen(
             )
             Column(
                 modifier = Modifier
-//                    .padding(horizontal = 16.dp)
                     .fillMaxSize(),
                 verticalArrangement = Arrangement.Center
             ) {
-            when (selectedTabIndex) {
-                0 -> SignInPane(emailValue, onEmailValueChange, passwordValue, onPasswordValueChange, loginState, loginAction, forgotPasswordAction, isButtonEnabled.value, onAuthenticated)
-                1 -> SignUpPane(registrationState, registrationAction)
-            }
+                when (selectedTabIndex) {
+                    0 -> SignInPane(
+                        emailValue,
+                        onEmailValueChange,
+                        passwordValue,
+                        onPasswordValueChange,
+                        loginState,
+                        loginAction,
+                        forgotPasswordAction,
+                        isButtonEnabled.value,
+                        onAuthenticated
+                    )
+
+                    1 -> SignUpPane(registrationState, registrationAction)
+                }
             }
         }
     }

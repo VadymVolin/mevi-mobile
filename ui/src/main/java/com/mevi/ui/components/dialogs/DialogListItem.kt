@@ -24,12 +24,12 @@ import com.mevi.ui.components.HighlightedText
 @Composable
 fun DialogListItem(
     icon: String,
-    name: String,
+    itemText: String,
     searchString: String? = "",
     onClick: () -> Unit,
     selectedItem: String?
 ) {
-    val isSelected = selectedItem == name
+    val isSelected = selectedItem == itemText
     Surface(
         shape = RoundedCornerShape(8.dp),
         color = if (isSelected) MaterialTheme.colorScheme.secondaryContainer else MaterialTheme.colorScheme.surface
@@ -45,7 +45,7 @@ fun DialogListItem(
             Spacer(modifier = Modifier.width(12.dp))
             HighlightedText(
                 modifier = Modifier.weight(1f),
-                fullText = name,
+                fullText = itemText,
                 searchString = searchString ?: ""
             )
             if (isSelected) {
@@ -63,12 +63,12 @@ fun DialogListItem(
 @Composable
 fun DialogListItem(
     icon: ImageVector,
-    name: String,
+    itemText: String,
     searchString: String? = "",
     onClick: () -> Unit,
     selectedItem: String?
 ) {
-    val isSelected = selectedItem == name
+    val isSelected = selectedItem == itemText
     Surface(
         shape = RoundedCornerShape(8.dp),
         color = if (isSelected) MaterialTheme.colorScheme.secondaryContainer else MaterialTheme.colorScheme.surface
@@ -88,7 +88,7 @@ fun DialogListItem(
             Spacer(modifier = Modifier.width(12.dp))
             HighlightedText(
                 modifier = Modifier.weight(1f),
-                fullText = name,
+                fullText = itemText,
                 searchString = searchString ?: ""
             )
             if (isSelected) {

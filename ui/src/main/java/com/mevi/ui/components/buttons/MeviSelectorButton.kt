@@ -64,13 +64,10 @@ fun MeviSelectorButton(
             )
         }
         Spacer(modifier = Modifier.weight(1f))
-        Row {
-            Icon(
-                contentDescription = null,
-                modifier = Modifier,
-                imageVector = Icons.Default.KeyboardArrowDown
-            )
-        }
+        Icon(
+            contentDescription = null,
+            imageVector = Icons.Default.KeyboardArrowDown
+        )
     }
 }
 
