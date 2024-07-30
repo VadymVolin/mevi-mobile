@@ -22,7 +22,7 @@ import androidx.compose.ui.window.DialogWindowProvider
 @Composable
 fun MeviDialog(
     dialogGravity: Int = Gravity.CENTER,
-    onDismissRequest:()->Unit,
+    onDismissRequest: () -> Unit,
     content: @Composable () -> Unit
 ) {
     BasicAlertDialog(
@@ -36,7 +36,7 @@ fun MeviDialog(
         )
     ) {
         val dialogWindowProvider = LocalView.current.parent as? DialogWindowProvider
-        dialogWindowProvider?.window?.setGravity(Gravity.TOP)
+        dialogWindowProvider?.window?.setGravity(dialogGravity)
         dialogWindowProvider?.window?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN)
         Surface(
             modifier = Modifier

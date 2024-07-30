@@ -1,6 +1,9 @@
 package com.mevi.ui.components.buttons
 
 import android.content.res.Configuration
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.CheckBox
@@ -56,8 +59,12 @@ fun MeviIconButton(
 @Composable
 fun MeviIconButtonPreview() {
     MeviTheme {
-        Surface {
+        Surface(
+            modifier = Modifier
+                .fillMaxSize()
+        ) {
+            Column(modifier = Modifier.padding(horizontal = 14.dp, vertical = 20.dp)) {
             MeviIconButton(onClick = { /*TODO*/ }, icon = Icons.Filled.CheckBox)
-        }
+        }}
     }
 }

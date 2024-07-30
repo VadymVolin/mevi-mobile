@@ -1,45 +1,28 @@
 package com.mevi.ui.screens.authorization
 
 
-import android.annotation.SuppressLint
 import android.util.Log
 import android.view.Gravity
-import android.view.WindowManager
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
-import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.wrapContentHeight
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.material.icons.filled.Clear
+import androidx.compose.material.icons.filled.Language
+import androidx.compose.material.icons.filled.Transgender
 import androidx.compose.material.icons.outlined.Mail
 import androidx.compose.material.icons.outlined.Person
-import androidx.compose.material3.BasicAlertDialog
-import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedButton
-import androidx.compose.material3.OutlinedTextField
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
-import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
@@ -49,39 +32,37 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
-import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.window.DialogProperties
-import androidx.compose.ui.window.DialogWindowProvider
-import com.mevi.common.utils.Country
-import com.mevi.common.utils.getCountries
 import com.mevi.domain.repository.user.model.MeviUser
 import com.mevi.ui.R
 import com.mevi.ui.components.WelcomeSection
 import com.mevi.ui.components.buttons.MeviButton
-import com.mevi.ui.components.buttons.MeviIconButton
+import com.mevi.ui.components.buttons.MeviSelectorButton
 import com.mevi.ui.components.dialogs.CountrySelector
+import com.mevi.ui.components.dialogs.GenderSelector
 import com.mevi.ui.components.dialogs.MeviDialog
 import com.mevi.ui.components.inputs.FormTextField
+import com.mevi.ui.model.CountryModel
+import com.mevi.ui.model.GenderModel
 import com.mevi.ui.screens.state.UIScreenState
-import java.util.ArrayList
-import java.util.Locale
 
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalLayoutApi::class)
 @Composable
 fun SignUpPane(
-    registrationState: UIScreenState<MeviUser>,
-    registrationAction: (Pair<String, String>) -> Unit
+    registrationState: UIScreenState<MeviUser>, registrationAction: (Pair<String, String>) -> Unit
 ) {
+    val focusRequester = remember { FocusRequester() }
+    val focusManager = LocalFocusManager.current
+    val keyboardController = LocalSoftwareKeyboardController.current
+
     val nameValue = rememberSaveable {
         mutableStateOf("")
     }
@@ -94,12 +75,50 @@ fun SignUpPane(
     val repeatPasswordValue = rememberSaveable {
         mutableStateOf("")
     }
-    val selectedCountry: MutableState<Country?> = remember {
+    val selectedCountry: MutableState<CountryModel?> = remember {
         mutableStateOf(null)
     }
+    val selectedGender: MutableState<GenderModel?> = remember {
+        mutableStateOf(null)
+    }
+    val buttonEnabled by rememberSaveable(
+        emailValue.value,
+        passwordValue.value,
+        repeatPasswordValue.value,
+        selectedCountry.value,
+        selectedGender.value
+    ) {
+        mutableStateOf(emailValue.value.isNotEmpty() && passwordValue.value.isNotEmpty() && repeatPasswordValue.value.isNotEmpty() && selectedCountry.value != null && selectedGender.value != null)
+    }
+    var countryPopupVisibility by rememberSaveable { mutableStateOf(false) }
+    var genderPopupVisibility by rememberSaveable { mutableStateOf(false) }
 
-    fun onSelectCountry(value: Country) {
+    fun showCountryPopup() {
+        focusManager.clearFocus()
+        countryPopupVisibility = true
+    }
+
+    fun hideCountryPopup() {
+        countryPopupVisibility = false
+    }
+
+    fun showGenderPopup() {
+        focusManager.clearFocus()
+        genderPopupVisibility = true
+    }
+
+    fun hideGenderPopup() {
+        genderPopupVisibility = false
+    }
+
+    fun onSelectCountry(value: CountryModel) {
         selectedCountry.value = value
+        hideCountryPopup()
+    }
+
+    fun onSelectGender(value: GenderModel) {
+        selectedGender.value = value
+        hideGenderPopup()
     }
 
     fun onNameValueChange(value: String) {
@@ -118,33 +137,24 @@ fun SignUpPane(
         repeatPasswordValue.value = value
     }
 
-    val buttonEnabled by rememberSaveable(emailValue, passwordValue) {
-        mutableStateOf(emailValue.value.isNotEmpty() && passwordValue.value.isNotEmpty())
-    }
-    var popupVisibility by rememberSaveable { mutableStateOf(false) }
-    fun showPopup() {
-        popupVisibility = true
 
-    }
 
-    fun hidePopup() {
-        popupVisibility = false
 
-    }
-
-    val focusRequester = remember { FocusRequester() }
-    val focusManager = LocalFocusManager.current
-    val keyboardController = LocalSoftwareKeyboardController.current
-
-    if (popupVisibility) {
-        MeviDialog(onDismissRequest = { hidePopup() }) {
-            CountrySelector(
-                selectedCountry = selectedCountry.value,
+    if (countryPopupVisibility) {
+        MeviDialog(dialogGravity = Gravity.TOP, onDismissRequest = { hideCountryPopup() }) {
+            CountrySelector(selectedCountry = selectedCountry.value,
                 onSelectCountry = { onSelectCountry(it) },
-                onDismissRequest = { hidePopup() })
+                onDismissRequest = { hideCountryPopup() })
         }
     }
-
+    if (genderPopupVisibility) {
+        MeviDialog(onDismissRequest = { hideGenderPopup() }) {
+            GenderSelector(
+                selectedGender = selectedGender.value,
+                onSelectGender = { onSelectGender(it) },
+            )
+        }
+    }
     Column(
         modifier = Modifier
             .padding(horizontal = 16.dp)
@@ -154,7 +164,6 @@ fun SignUpPane(
     ) {
         WelcomeSection(secondaryText = stringResource(id = R.string.TEXT_WELCOME_SECTION_CREATE_ACCOUNT))
         Spacer(modifier = Modifier.height(40.dp))
-
         FormTextField(
             modifier = Modifier.focusRequester(focusRequester),
             placeholder = stringResource(id = R.string.TEXTFIELD_PLACEHOLDER_NAME),
@@ -177,14 +186,13 @@ fun SignUpPane(
             ),
         )
         Spacer(modifier = Modifier.height(8.dp))
-
         FormTextField(
             placeholder = stringResource(id = R.string.TEXTFIELD_PLACEHOLDER_PASSWORD),
             isPassword = true,
             value = passwordValue.value,
             onValueChange = { onPasswordValueChange(it) },
             keyboardOptions = KeyboardOptions.Default.copy(
-                imeAction = ImeAction.Done
+                imeAction = ImeAction.Next
 
             ),
 
@@ -201,16 +209,20 @@ fun SignUpPane(
 
             ),
             keyboardActions = KeyboardActions(onDone = {
-                // Handle button click action here
-                Log.d("SUBMIT", "Btn click")
                 keyboardController?.hide()
                 focusManager.clearFocus()
             })
         )
         Spacer(modifier = Modifier.height(8.dp))
-        OutlinedButton(onClick = { /*TODO*/ }) {
-            Text(text = "text")
-        }
+        MeviSelectorButton(text = selectedCountry.value?.countryName
+            ?: stringResource(R.string.BUTTON_SELECT_COUNTRY),
+            icon = Icons.Default.Language,
+            onClick = { showCountryPopup() })
+        Spacer(modifier = Modifier.height(8.dp))
+        MeviSelectorButton(text = selectedGender.value?.type
+            ?: stringResource(R.string.BUTTON_SELECT_GENDER),
+            icon = Icons.Default.Transgender,
+            onClick = { showGenderPopup() })
         TextButton(modifier = Modifier.align(Alignment.End), onClick = { /*TODO*/ }) {
             Text(
                 text = stringResource(id = R.string.BUTTON_FORGOT_PASSWORD),
@@ -221,14 +233,10 @@ fun SignUpPane(
         Spacer(modifier = Modifier.height(24.dp))
         MeviButton(
             onClick = { Log.d("SUBMIT", "Btn click") },
-            text = stringResource(id = R.string.TEXT_SIGN_IN),
+            text = stringResource(id = R.string.TEXT_SIGN_UP),
             enabled = buttonEnabled,
         )
-        MeviButton(
-            onClick = { showPopup() },
-            text = "showPopup",
 
-            )
     }
 }
 

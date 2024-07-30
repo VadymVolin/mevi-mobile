@@ -33,4 +33,12 @@
     <string name="TEXTFIELD_PLACEHOLDER_SELECT_COUNTRY">Select country</string>
     <string name="TEXTFIELD_PLACEHOLDER_SELECT_GENDER">Select gender</string>
     <string name="TEXTFIELD_PLACEHOLDER_ENTER_COUNTRY_NAME">Enter country name</string>
+    <string name="TEXT_GENDER_MALE">Male</string>
+    <string name="TEXT_GENDER_FEMALE">Female</string>
+    <string name="BUTTON_SELECT_COUNTRY">Select country</string>
+    <string name="BUTTON_SELECT_GENDER">Select Gender</string>
+    <string name="TEXT_NO_MATCHES">No matches</string>
+    <string name="TEXT_NO_SUCH_COUNTRY">Oops, it looks like there is no such country</string>
+    <string name="TEXT_ALL_COUNTRIES">All countries</string>
+    <string name="TEXT_MATCHES">Matches</string>
 </resources>
