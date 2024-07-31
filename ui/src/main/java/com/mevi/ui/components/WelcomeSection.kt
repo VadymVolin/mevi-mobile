@@ -35,7 +35,7 @@ fun WelcomeSection(secondaryText: String, modifier: Modifier = Modifier) {
         )
         Spacer(modifier = Modifier.height(8.dp))
         Text(
-            text = stringResource(id = R.string.WELCOME_SECTION_TITLE),
+            text = stringResource(id = R.string.TEXT_WELCOME_SECTION_TITLE),
             style = MaterialTheme.typography.titleLarge
         )
         Spacer(modifier = Modifier.height(4.dp))

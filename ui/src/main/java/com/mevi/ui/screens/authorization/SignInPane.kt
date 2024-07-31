@@ -25,7 +25,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
@@ -53,7 +52,6 @@ fun SignInPane(
     if (loginState.data != null) {
         onAuthenticated()
     }
-    val keyboardController = LocalSoftwareKeyboardController.current
     val emailErrorStringId = remember(loginState.error) {
         mutableIntStateOf(loginState.error?.let { getErrorText(FieldType.EMAIL, it) } ?: 0)
     }
@@ -66,11 +64,11 @@ fun SignInPane(
             .fillMaxSize(),
         verticalArrangement = Arrangement.Center
     ) {
-        WelcomeSection(secondaryText = stringResource(id = R.string.WELCOME_SECTION_TEXT))
+        WelcomeSection(secondaryText = stringResource(id = R.string.TEXT_WELCOME_SECTION_WELCOME_BACK))
         Spacer(modifier = Modifier.height(40.dp))
         Column(modifier = Modifier.fillMaxWidth()) {
             FormTextField(
-                placeholder = stringResource(id = R.string.FORMTEXTFIELD_EMAIL_PLACEHOLDER),
+                placeholder = stringResource(id = R.string.TEXTFIELD_PLACEHOLDER_EMAIL),
                 value = emailValue.value,
                 onValueChange = onEmailValueChange,
                 leadingIcon = Icons.Outlined.Mail,
@@ -82,7 +80,7 @@ fun SignInPane(
             )
             Spacer(modifier = Modifier.height(8.dp))
             FormTextField(
-                placeholder = stringResource(id = R.string.FORMTEXTFIELD_PASSWORD_PLACEHOLDER),
+                placeholder = stringResource(id = R.string.TEXTFIELD_PLACEHOLDER_PASSWORD),
                 isPassword = true,
                 value = passwordValue.value,
                 onValueChange = onPasswordValueChange,
@@ -92,11 +90,9 @@ fun SignInPane(
                     imeAction = ImeAction.Done
                 ),
                 keyboardActions = KeyboardActions(onDone = {
-                    // Handle button click action here
                     if (isButtonEnabled) {
                         loginAction(emailValue.value to passwordValue.value)
                     }
-                    keyboardController?.hide()
                 })
             )
             Spacer(modifier = Modifier.height(8.dp))
@@ -104,7 +100,7 @@ fun SignInPane(
                 forgotPasswordAction()
             }) {
                 Text(
-                    text = stringResource(id = R.string.TEXT_FORGOT_PASSWORD),
+                    text = stringResource(id = R.string.BUTTON_FORGOT_PASSWORD),
                     style = MaterialTheme.typography.titleSmall,
                     fontWeight = FontWeight.Medium,
                 )

@@ -76,7 +76,7 @@ fun NoInternetConnectionAlert(
                     return@MeviButton
                 }
             },
-            text = stringResource(id = R.string.TRY_AGAIN_BUTTON)
+            text = stringResource(id = R.string.BUTTON_TRY_AGAIN)
         )
     }
 }
