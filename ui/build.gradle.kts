@@ -70,8 +70,8 @@ dependencies {
     implementation(libs.coil.compose)
     // firebase
     implementation(platform(libs.firebase.bom))
-    implementation(libs.firebase.analytics)
-    implementation(libs.firebase.auth) // TODO: For testing only, remove when logout feature is ready
+    implementation(libs.firebase.analytics.ktx)
+    implementation(libs.firebase.auth.ktx) // TODO: For testing only, remove when logout feature is ready
 
     // credentials manager
     implementation(libs.androidx.credential.manager)

@@ -3,6 +3,8 @@ package com.mevi.domain.repository.user.usecase
 import com.mevi.domain.model.MeviResult
 import com.mevi.domain.repository.model.RepositoryResult
 import com.mevi.domain.repository.user.UserRepository
+import com.mevi.domain.repository.user.model.MeviCountry
+import com.mevi.domain.repository.user.model.MeviGender
 import com.mevi.domain.repository.user.model.MeviUser
 
 /**
@@ -22,10 +24,17 @@ class LoginUserByFirebaseUseCase(private val userRepository: UserRepository) :
                     MeviUser(
                         apiResult.data.email,
                         apiResult.data.phoneNumber,
-                        apiResult.data.providerId,
+                        apiResult.data.provider,
                         apiResult.data.name,
                         apiResult.data.isEmailVerified,
-                        apiResult.data.photoUrl
+                        apiResult.data.photoUrl,
+                        apiResult.data.password,
+                        apiResult.data.country?.let {
+                            MeviCountry(it.isoCode, it.countryName, it.flag)
+                        },
+                        apiResult.data.gender?.let {
+                            MeviGender(it.type)
+                        }
                     )
                 )
             }

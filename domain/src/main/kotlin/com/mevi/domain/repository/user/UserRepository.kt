@@ -2,6 +2,7 @@ package com.mevi.domain.repository.user
 
 import com.mevi.domain.repository.model.RepositoryResult
 import com.mevi.domain.repository.user.model.BaseUser
+import com.mevi.domain.repository.user.usecase.model.RegisterUserModel
 
 /**
  * Repository associated with authentication processes and operations
@@ -16,11 +17,9 @@ interface UserRepository {
     /**
      * Creates new user account
      *
-     * @param credentials user [Pair] credentials,
-     * where [Pair.first] is an email or username
-     * and [Pair.second] is a password
+     * @param registerUserModel data holder with user credentials
      */
-    suspend fun registerByFirebase(credentials: Pair<String, String>): RepositoryResult<BaseUser>
+    suspend fun registerByFirebase(registerUserModel: RegisterUserModel): RepositoryResult<BaseUser>
 
     /**
      * Login to user account

@@ -21,6 +21,7 @@ import com.mevi.domain.repository.user.model.MeviUser
 import com.mevi.domain.repository.user.usecase.LoginUserByFirebaseUseCase
 import com.mevi.domain.repository.user.usecase.LoginUserByGoogleFirebaseUseCase
 import com.mevi.domain.repository.user.usecase.RegisterUserByFirebaseUseCase
+import com.mevi.domain.repository.user.usecase.model.RegisterUserModel
 import com.mevi.ui.BuildConfig
 import com.mevi.ui.screens.state.UIScreenState
 import kotlinx.coroutines.launch
@@ -53,15 +54,15 @@ class AuthorizationViewModel(
     var loginState by mutableStateOf(UIScreenState<MeviUser>(false, null, null))
         private set
 
-    fun register(credentials: Pair<String, String>) {
-        val validationResult = validate(credentials)
+    fun register(registerUserModel: RegisterUserModel) {
+        val validationResult = validate(registerUserModel.email to registerUserModel.password)
         if (validationResult != null) {
             registrationState = UIScreenState(false, null, validationResult)
             return
         }
         registrationState = UIScreenState(true, null, null)
         viewModelScope.launch {
-            registerUserByFirebaseUseCase.register(credentials)
+            registerUserByFirebaseUseCase.register(registerUserModel)
                 .collect {
                     registrationState = when (it) {
                         is MeviResult.Success -> UIScreenState(false, it.data, null)
@@ -103,7 +104,7 @@ class AuthorizationViewModel(
         }
     }
 
-    private fun validate(credentials: Pair<String, String>) : MeviError? {
+    private fun validate(credentials: Pair<String?, String?>) : MeviError? {
         val emailResult = !credentials.first.isValidEmailFormat()
         val passwordResult = !credentials.second.isValidPasswordFormat()
         return when {

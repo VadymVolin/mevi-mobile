@@ -1,6 +1,7 @@
 package com.mevi.data.repository.user.api
 
 import com.mevi.data.repository.user.api.model.UserDto
+import com.mevi.domain.repository.user.usecase.model.RegisterUserModel
 
 /**
  * Base interface for user api
@@ -15,11 +16,9 @@ interface UserApi {
     /**
      * Creates new user account
      *
-     * @param credentials user [Pair] credentials,
-     * where [Pair.first] is an email or username
-     * and [Pair.second] is a password
+     * @param registerUserModel data holder with user credentials
      */
-    suspend fun register(credentials: Pair<String, String>): UserDto
+    suspend fun register(registerUserModel: RegisterUserModel): UserDto
 
     /**
      * Logins to user account

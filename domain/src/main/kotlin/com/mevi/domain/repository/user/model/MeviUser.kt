@@ -9,10 +9,13 @@ package com.mevi.domain.repository.user.model
  * @since 8/5/24
  */
 data class MeviUser(
-    override val email: String?,
-    override val phoneNumber: String?,
-    override val providerId: String?,
-    override val name: String?,
-    override val isEmailVerified: Boolean,
-    override val photoUrl: String?
+    override val email: String? = null,
+    override val phoneNumber: String? = null,
+    override val provider: AuthenticationProvider,
+    override val name: String? = null,
+    override val isEmailVerified: Boolean = false,
+    override val photoUrl: String? = null,
+    override val password: String? = null,
+    override val country: MeviCountry? = null,
+    override val gender: MeviGender? = null
 ) : BaseUser

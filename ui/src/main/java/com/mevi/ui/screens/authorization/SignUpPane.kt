@@ -1,7 +1,6 @@
 package com.mevi.ui.screens.authorization
 
 
-import android.util.Log
 import android.view.Gravity
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -39,6 +38,9 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import com.mevi.domain.repository.user.model.MeviUser
+import com.mevi.domain.repository.user.usecase.model.Country
+import com.mevi.domain.repository.user.usecase.model.Gender
+import com.mevi.domain.repository.user.usecase.model.RegisterUserModel
 import com.mevi.ui.R
 import com.mevi.ui.components.WelcomeSection
 import com.mevi.ui.components.buttons.MeviButton
@@ -53,8 +55,14 @@ import com.mevi.ui.screens.state.UIScreenState
 
 @Composable
 fun SignUpPane(
-    registrationState: UIScreenState<MeviUser>, registrationAction: (Pair<String, String>) -> Unit
+    registrationState: UIScreenState<MeviUser>,
+    registrationAction: (RegisterUserModel) -> Unit,
+    onAuthenticated: () -> Unit
 ) {
+    if (registrationState.data != null) {
+        onAuthenticated()
+    }
+
     val focusRequester = remember { FocusRequester() }
     val focusManager = LocalFocusManager.current
     val keyboardController = LocalSoftwareKeyboardController.current
@@ -225,7 +233,17 @@ fun SignUpPane(
         }
         Spacer(modifier = Modifier.height(24.dp))
         MeviButton(
-            onClick = { Log.d("SUBMIT", "Btn click") },
+            onClick = {
+                registrationAction(
+                    RegisterUserModel(
+                        email = emailValue.value,
+                        password = passwordValue.value,
+                        name = nameValue.value,
+                        country = selectedCountry.value?.let { Country(it.isoCode, it.countryName, it.flag) },
+                        gender = selectedGender.value?.let { Gender(it.type) }
+                    )
+                )
+            },
             text = stringResource(id = R.string.TEXT_SIGN_UP),
             enabled = buttonEnabled,
         )

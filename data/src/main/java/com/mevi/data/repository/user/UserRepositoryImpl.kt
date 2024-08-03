@@ -8,10 +8,12 @@ import com.google.firebase.auth.FirebaseAuthWeakPasswordException
 import com.mevi.data.repository.user.api.UserApi
 import com.mevi.data.repository.user.api.model.AccountDataDto
 import com.mevi.data.repository.user.api.model.UserDto
+import com.mevi.data.repository.user.cache.firestore.UserFirestoreCache
 import com.mevi.domain.repository.model.RepositoryException
 import com.mevi.domain.repository.model.RepositoryResult
 import com.mevi.domain.repository.user.UserRepository
 import com.mevi.domain.repository.user.model.BaseUser
+import com.mevi.domain.repository.user.usecase.model.RegisterUserModel
 
 /**
  * Repository implementation of [UserRepository] associated with authentication processes and operations
@@ -21,17 +23,22 @@ import com.mevi.domain.repository.user.model.BaseUser
  *
  * @since 4/5/24
  */
-class UserRepositoryImpl(private val firebaseAuthApi: UserApi) : UserRepository {
+class UserRepositoryImpl(
+    private val userFirebaseApi: UserApi,
+    private val userFirestoreCache: UserFirestoreCache
+) : UserRepository {
 
     private val accountData: AccountDataDto = AccountDataDto(null)
 
     override val baseUser: UserDto?
         get() = accountData.userDto
 
-    override suspend fun registerByFirebase(credentials: Pair<String, String>): RepositoryResult<UserDto> =
+    override suspend fun registerByFirebase(registerUserModel: RegisterUserModel): RepositoryResult<UserDto> =
         try {
-            val user = firebaseAuthApi.register(credentials)
+            val user = userFirebaseApi.register(registerUserModel)
             accountData.userDto = user
+            Log.d("FORTRA", "TAG registerByFirebase: $user")
+            userFirestoreCache.createUser(registerUserModel, user)
             RepositoryResult.Success(user)
         } catch (e: Exception) {
             Log.e(TAG, "registerByFirebase: ", e)
@@ -40,8 +47,9 @@ class UserRepositoryImpl(private val firebaseAuthApi: UserApi) : UserRepository 
 
     override suspend fun loginByFirebase(credentials: Pair<String, String>): RepositoryResult<UserDto> =
         try {
-            val user = firebaseAuthApi.login(credentials)
+            val user = userFirebaseApi.login(credentials)
             accountData.userDto = user
+            Log.d("FORTRA", "TAG loginByFirebase: $user")
             RepositoryResult.Success(user)
         } catch (e: Exception) {
             Log.e(TAG, "loginByFirebase: ", e)
@@ -50,8 +58,9 @@ class UserRepositoryImpl(private val firebaseAuthApi: UserApi) : UserRepository 
 
     override suspend fun loginByGoogleFirebase(googleIdToken: String?): RepositoryResult<BaseUser> =
         try {
-            val user = firebaseAuthApi.loginWithGoogle(googleIdToken)
+            val user = userFirebaseApi.loginWithGoogle(googleIdToken)
             accountData.userDto = user
+            Log.d("FORTRA", "TAG loginByGoogleFirebase: $user")
             RepositoryResult.Success(user)
         } catch (e: Exception) {
             Log.e(TAG, "loginByGoogleFirebase: ", e)
@@ -59,7 +68,7 @@ class UserRepositoryImpl(private val firebaseAuthApi: UserApi) : UserRepository 
         }
 
     override suspend fun logoutByFirebase(): RepositoryResult<Unit> = try {
-        val success = firebaseAuthApi.logout()
+        val success = userFirebaseApi.logout()
         cleanUserData()
         RepositoryResult.Success(success)
     } catch (e: Exception) {
@@ -71,7 +80,7 @@ class UserRepositoryImpl(private val firebaseAuthApi: UserApi) : UserRepository 
         name: String?,
         avatarUrl: String?
     ): RepositoryResult<Unit> = try {
-        RepositoryResult.Success(firebaseAuthApi.updateProfilePublicData(name ?: accountData.userDto?.name, avatarUrl))
+        RepositoryResult.Success(userFirebaseApi.updateProfilePublicData(name ?: accountData.userDto?.name, avatarUrl))
     } catch (e: Exception) {
         Log.e(TAG, "updateProfileByFirebase: ", e)
         RepositoryResult.Error(getRepositoryException(e))
@@ -80,7 +89,7 @@ class UserRepositoryImpl(private val firebaseAuthApi: UserApi) : UserRepository 
     override suspend fun updateProfileEmailByFirebase(
         email: String
     ): RepositoryResult<Unit> = try {
-        RepositoryResult.Success(firebaseAuthApi.updateEmail(email))
+        RepositoryResult.Success(userFirebaseApi.updateEmail(email))
     } catch (e: Exception) {
         Log.e(TAG, "updateProfileEmailByFirebase: ", e)
         RepositoryResult.Error(getRepositoryException(e))
@@ -90,7 +99,7 @@ class UserRepositoryImpl(private val firebaseAuthApi: UserApi) : UserRepository 
         get() = isAuthenticatedByFirebase
 
     private val isAuthenticatedByFirebase: Boolean
-        get() = firebaseAuthApi.isAuthenticated
+        get() = userFirebaseApi.isAuthenticated
 
     private fun cleanUserData() {
         accountData.userDto = null

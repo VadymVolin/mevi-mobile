@@ -13,6 +13,8 @@ import com.google.firebase.auth.userProfileChangeRequest
 import com.mevi.data.BuildConfig
 import com.mevi.data.repository.user.api.UserApi
 import com.mevi.data.repository.user.api.model.UserDto
+import com.mevi.domain.repository.user.model.AuthenticationProvider
+import com.mevi.domain.repository.user.usecase.model.RegisterUserModel
 import kotlinx.coroutines.tasks.await
 
 /**
@@ -23,10 +25,10 @@ import kotlinx.coroutines.tasks.await
  *
  * @since 4/5/24
  */
-class FirebaseUserApi : UserApi {
+class UserFirebaseApi : UserApi {
 
     companion object {
-        private val TAG = FirebaseUserApi::class.java.name
+        private val TAG = UserFirebaseApi::class.java.name
 
         const val INTERNAL_ERROR_CODE = "USER_NOT_FOUND"
     }
@@ -43,19 +45,28 @@ class FirebaseUserApi : UserApi {
     }
 
     @Throws(FirebaseAuthInvalidUserException::class)
-    override suspend fun register(credentials: Pair<String, String>): UserDto {
+    override suspend fun register(registerUserModel: RegisterUserModel): UserDto {
+        val email: String = registerUserModel.email ?: throw FirebaseAuthInvalidUserException(
+            INTERNAL_ERROR_CODE,
+            "Email is null"
+        )
+        val password: String = registerUserModel.password ?: throw FirebaseAuthInvalidUserException(
+            INTERNAL_ERROR_CODE,
+            "Password is null"
+        )
         val authResult = firebaseAuth
-            .createUserWithEmailAndPassword(credentials.first, credentials.second)
+            .createUserWithEmailAndPassword(email, password)
             .await()
         val firebaseUser = authResult.user
         return firebaseUser?.let {
             UserDto(
                 firebaseUser.email,
                 firebaseUser.phoneNumber,
-                firebaseUser.providerId,
+                AuthenticationProvider.CREDENTIALS,
                 firebaseUser.displayName,
                 firebaseUser.isEmailVerified,
-                firebaseUser.photoUrl?.toString()
+                firebaseUser.photoUrl?.toString(),
+                password
             )
         } ?: throw FirebaseAuthInvalidUserException(
             INTERNAL_ERROR_CODE,
@@ -73,10 +84,11 @@ class FirebaseUserApi : UserApi {
             UserDto(
                 firebaseUser.email,
                 firebaseUser.phoneNumber,
-                firebaseUser.providerId,
+                AuthenticationProvider.CREDENTIALS,
                 firebaseUser.displayName,
                 firebaseUser.isEmailVerified,
-                firebaseUser.photoUrl?.toString()
+                firebaseUser.photoUrl?.toString(),
+                credentials.second
             )
         } ?: throw FirebaseAuthInvalidUserException(
             INTERNAL_ERROR_CODE,
@@ -94,7 +106,7 @@ class FirebaseUserApi : UserApi {
             UserDto(
                 firebaseUser.email,
                 firebaseUser.phoneNumber,
-                firebaseUser.providerId,
+                AuthenticationProvider.GOOGLE,
                 firebaseUser.displayName,
                 firebaseUser.isEmailVerified,
                 firebaseUser.photoUrl?.toString()

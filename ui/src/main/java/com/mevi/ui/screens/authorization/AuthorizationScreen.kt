@@ -20,6 +20,7 @@ import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
 import com.mevi.domain.model.MeviError
 import com.mevi.domain.repository.user.model.MeviUser
+import com.mevi.domain.repository.user.usecase.model.RegisterUserModel
 import com.mevi.ui.R
 import com.mevi.ui.components.tabs.Tabs
 import com.mevi.ui.screens.state.UIScreenState
@@ -37,7 +38,7 @@ fun AuthorizationScreen(
     loginByGoogleAction: (context: Context) -> Unit,
     loginAction: (Pair<String, String>) -> Unit,
     registrationState: UIScreenState<MeviUser>,
-    registrationAction: (Pair<String, String>) -> Unit,
+    registrationAction: (RegisterUserModel) -> Unit,
     forgotPasswordAction: () -> Unit,
     onAuthenticated: () -> Unit
 ) {
@@ -93,7 +94,7 @@ fun AuthorizationScreen(
                         onAuthenticated
                     )
 
-                    1 -> SignUpPane(registrationState, registrationAction)
+                    1 -> SignUpPane(registrationState, registrationAction, onAuthenticated)
                 }
             }
         }
