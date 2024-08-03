@@ -13,7 +13,7 @@ import com.mevi.domain.repository.user.model.BaseUser
 data class UserDto(
     override val email: String?,
     override val phoneNumber: String?,
-    override val tenantId: String?,
+    override val providerId: String?,
     override val name: String?,
     override val isEmailVerified: Boolean,
     override val photoUrl: String?

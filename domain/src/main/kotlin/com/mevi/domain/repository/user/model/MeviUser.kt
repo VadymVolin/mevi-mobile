@@ -11,7 +11,7 @@ package com.mevi.domain.repository.user.model
 data class MeviUser(
     override val email: String?,
     override val phoneNumber: String?,
-    override val tenantId: String?,
+    override val providerId: String?,
     override val name: String?,
     override val isEmailVerified: Boolean,
     override val photoUrl: String?

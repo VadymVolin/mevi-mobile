@@ -15,6 +15,8 @@ android {
         vectorDrawables {
             useSupportLibrary = true
         }
+
+        buildConfigField("String", "GOOGLE_WEB_CLIENT_ID", "\"688998092838-bo9ln4vmu1c1g0ueousoj74b5g18m010.apps.googleusercontent.com\"")
     }
 
     buildTypes {
@@ -69,7 +71,12 @@ dependencies {
     // firebase
     implementation(platform(libs.firebase.bom))
     implementation(libs.firebase.analytics)
-    implementation(libs.firebase.auth)
+    implementation(libs.firebase.auth) // TODO: For testing only, remove when logout feature is ready
+
+    // credentials manager
+    implementation(libs.androidx.credential.manager)
+    implementation(libs.androidx.credential.manager.play)
+    implementation(libs.google.id.library)
 
     //di
     implementation(libs.koin.androidx.compose)

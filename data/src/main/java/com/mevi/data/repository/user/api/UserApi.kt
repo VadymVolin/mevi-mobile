@@ -32,10 +32,11 @@ interface UserApi {
 
     /**
      * Logins with google account
+     * @param googleIdToken googleIdToken value
      */
-    suspend fun loginWithGoogle(googleTokenId: String): UserDto
+     suspend fun loginWithGoogle(googleIdToken: String?): UserDto
 
-    /**
+        /**
      * Logs out user
      */
     suspend fun logout()

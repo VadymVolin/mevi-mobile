@@ -1,11 +1,11 @@
 package com.mevi.ui.screens.authorization
 
+import android.content.Context
 import android.content.res.Configuration
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -21,7 +21,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import com.mevi.domain.model.MeviError
 import com.mevi.domain.repository.user.model.MeviUser
 import com.mevi.ui.R
-import androidx.compose.ui.unit.dp
 import com.mevi.ui.components.tabs.Tabs
 import com.mevi.ui.screens.state.UIScreenState
 import com.mevi.ui.theme.MeviTheme
@@ -35,6 +34,7 @@ enum class TabRoutes(val title: Int) {
 @Composable
 fun AuthorizationScreen(
     loginState: UIScreenState<MeviUser>,
+    loginByGoogleAction: (context: Context) -> Unit,
     loginAction: (Pair<String, String>) -> Unit,
     registrationState: UIScreenState<MeviUser>,
     registrationAction: (Pair<String, String>) -> Unit,
@@ -87,6 +87,7 @@ fun AuthorizationScreen(
                         onPasswordValueChange,
                         loginState,
                         loginAction,
+                        loginByGoogleAction,
                         forgotPasswordAction,
                         isButtonEnabled.value,
                         onAuthenticated
@@ -134,6 +135,7 @@ fun AuthorizationPreview() {
     MeviTheme {
         AuthorizationScreen(
             UIScreenState(false, null, null),
+            {},
             {},
             UIScreenState(false, null, null),
             {},

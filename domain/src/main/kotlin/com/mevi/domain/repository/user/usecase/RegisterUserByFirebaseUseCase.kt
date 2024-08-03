@@ -22,7 +22,7 @@ class RegisterUserByFirebaseUseCase(private val userRepository: UserRepository) 
                     MeviUser(
                         apiResult.data.email,
                         apiResult.data.phoneNumber,
-                        apiResult.data.tenantId,
+                        apiResult.data.providerId,
                         apiResult.data.name,
                         apiResult.data.isEmailVerified,
                         apiResult.data.photoUrl

@@ -6,17 +6,17 @@ import com.mevi.domain.repository.user.UserRepository
 import com.mevi.domain.repository.user.model.MeviUser
 
 /**
- * Logins user via Firebase
+ * Logins user via Google + Firebase
  *
  * @author Vadym Volin
  * @author midnight85
  *
- * @since 6/5/24
+ * @since 3/8/24
  */
-class LoginUserByFirebaseUseCase(private val userRepository: UserRepository) :
+class LoginUserByGoogleFirebaseUseCase(private val userRepository: UserRepository) :
     BaseNetworkBasedUseCase<MeviResult<MeviUser>>() {
-    fun login(credentials: Pair<String, String>) = execute {
-        when (val apiResult = userRepository.loginByFirebase(credentials)) {
+    fun login(googleIdToken: String?) = execute {
+        when (val apiResult = userRepository.loginByGoogleFirebase(googleIdToken)) {
             is RepositoryResult.Success -> {
                 MeviResult.Success(
                     MeviUser(

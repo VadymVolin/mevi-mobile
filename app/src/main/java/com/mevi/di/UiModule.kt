@@ -19,6 +19,6 @@ import org.koin.dsl.module
 val uiModule = module {
     single { NetworkManager(androidContext()) }
     single { NavigationComponent() }
-    viewModel { AuthorizationViewModel(get(), get()) }
+    viewModel { AuthorizationViewModel(get(), get(), get()) }
     viewModel { StartViewModel(get()) }
 }

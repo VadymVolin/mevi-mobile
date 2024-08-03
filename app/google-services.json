@@ -14,6 +14,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "688998092838-vvl94m2k5g1steufq2npc08j72im2eiq.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.mevi.mobile",
+            "certificate_hash": "fca8d3d172b272a1203e543c5fb44a91f2104b70"
+          }
+        },
+        {
           "client_id": "688998092838-bo9ln4vmu1c1g0ueousoj74b5g18m010.apps.googleusercontent.com",
           "client_type": 3
         }

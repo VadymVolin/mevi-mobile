@@ -2,7 +2,6 @@ package com.mevi.data.repository.user.api.firebase
 
 import android.net.Uri
 import android.util.Log
-import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.firebase.Firebase
 import com.google.firebase.auth.ActionCodeSettings
 import com.google.firebase.auth.FirebaseAuth
@@ -49,21 +48,19 @@ class FirebaseUserApi : UserApi {
             .createUserWithEmailAndPassword(credentials.first, credentials.second)
             .await()
         val firebaseUser = authResult.user
-        if (firebaseUser != null) {
-            return UserDto(
+        return firebaseUser?.let {
+            UserDto(
                 firebaseUser.email,
                 firebaseUser.phoneNumber,
-                firebaseUser.tenantId,
+                firebaseUser.providerId,
                 firebaseUser.displayName,
                 firebaseUser.isEmailVerified,
                 firebaseUser.photoUrl?.toString()
             )
-        } else {
-            throw FirebaseAuthInvalidUserException(
-                INTERNAL_ERROR_CODE,
-                "User not found after registration"
-            )
-        }
+        } ?: throw FirebaseAuthInvalidUserException(
+            INTERNAL_ERROR_CODE,
+            "User not found after registration"
+        )
     }
 
     @Throws(FirebaseAuthInvalidUserException::class)
@@ -72,43 +69,40 @@ class FirebaseUserApi : UserApi {
             .signInWithEmailAndPassword(credentials.first, credentials.second)
             .await()
         val firebaseUser = authResult.user
-        if (firebaseUser != null) {
-            return UserDto(
+        return firebaseUser?.let {
+            UserDto(
                 firebaseUser.email,
                 firebaseUser.phoneNumber,
-                firebaseUser.tenantId,
+                firebaseUser.providerId,
                 firebaseUser.displayName,
                 firebaseUser.isEmailVerified,
                 firebaseUser.photoUrl?.toString()
             )
-        } else {
-            throw FirebaseAuthInvalidUserException(
-                INTERNAL_ERROR_CODE,
-                "User not found after login"
-            )
-        }
+        } ?: throw FirebaseAuthInvalidUserException(
+            INTERNAL_ERROR_CODE,
+            "User not found after login"
+        )
     }
 
-    @Throws(FirebaseAuthInvalidUserException::class)
-    override suspend fun loginWithGoogle(googleTokenId: String): UserDto {
-        val credential = GoogleAuthProvider.getCredential(googleTokenId, null)
-        val authResult = firebaseAuth.signInWithCredential(credential).await()
+    @Throws(Exception::class)
+    override suspend fun loginWithGoogle(googleIdToken: String?): UserDto {
+        val authCredential = GoogleAuthProvider.getCredential(googleIdToken, null)
+        val authResult = firebaseAuth.signInWithCredential(authCredential).await()
+
         val firebaseUser = authResult.user
-        if (firebaseUser != null) {
-            return UserDto(
+        return firebaseUser?.let {
+            UserDto(
                 firebaseUser.email,
                 firebaseUser.phoneNumber,
-                firebaseUser.tenantId,
+                firebaseUser.providerId,
                 firebaseUser.displayName,
                 firebaseUser.isEmailVerified,
                 firebaseUser.photoUrl?.toString()
             )
-        } else {
-            throw FirebaseAuthInvalidUserException(
-                INTERNAL_ERROR_CODE,
-                "User not found after login"
-            )
-        }
+        } ?: throw FirebaseAuthInvalidUserException(
+            INTERNAL_ERROR_CODE,
+            "User not found after login"
+        )
     }
 
     @Throws(FirebaseAuthInvalidUserException::class)

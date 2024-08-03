@@ -1,5 +1,6 @@
 package com.mevi.data.repository.user
 
+import android.util.Log
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException
 import com.google.firebase.auth.FirebaseAuthInvalidUserException
 import com.google.firebase.auth.FirebaseAuthUserCollisionException
@@ -10,6 +11,7 @@ import com.mevi.data.repository.user.api.model.UserDto
 import com.mevi.domain.repository.model.RepositoryException
 import com.mevi.domain.repository.model.RepositoryResult
 import com.mevi.domain.repository.user.UserRepository
+import com.mevi.domain.repository.user.model.BaseUser
 
 /**
  * Repository implementation of [UserRepository] associated with authentication processes and operations
@@ -32,6 +34,7 @@ class UserRepositoryImpl(private val firebaseAuthApi: UserApi) : UserRepository 
             accountData.userDto = user
             RepositoryResult.Success(user)
         } catch (e: Exception) {
+            Log.e(TAG, "registerByFirebase: ", e)
             RepositoryResult.Error(getRepositoryException(e, ActionType.REGISTRATION))
         }
 
@@ -41,6 +44,17 @@ class UserRepositoryImpl(private val firebaseAuthApi: UserApi) : UserRepository 
             accountData.userDto = user
             RepositoryResult.Success(user)
         } catch (e: Exception) {
+            Log.e(TAG, "loginByFirebase: ", e)
+            RepositoryResult.Error(getRepositoryException(e, ActionType.LOGIN))
+        }
+
+    override suspend fun loginByGoogleFirebase(googleIdToken: String?): RepositoryResult<BaseUser> =
+        try {
+            val user = firebaseAuthApi.loginWithGoogle(googleIdToken)
+            accountData.userDto = user
+            RepositoryResult.Success(user)
+        } catch (e: Exception) {
+            Log.e(TAG, "loginByGoogleFirebase: ", e)
             RepositoryResult.Error(getRepositoryException(e, ActionType.LOGIN))
         }
 
@@ -49,6 +63,7 @@ class UserRepositoryImpl(private val firebaseAuthApi: UserApi) : UserRepository 
         cleanUserData()
         RepositoryResult.Success(success)
     } catch (e: Exception) {
+        Log.e(TAG, "logoutByFirebase: ", e)
         RepositoryResult.Error(getRepositoryException(e))
     }
 
@@ -58,6 +73,7 @@ class UserRepositoryImpl(private val firebaseAuthApi: UserApi) : UserRepository 
     ): RepositoryResult<Unit> = try {
         RepositoryResult.Success(firebaseAuthApi.updateProfilePublicData(name ?: accountData.userDto?.name, avatarUrl))
     } catch (e: Exception) {
+        Log.e(TAG, "updateProfileByFirebase: ", e)
         RepositoryResult.Error(getRepositoryException(e))
     }
 
@@ -66,6 +82,7 @@ class UserRepositoryImpl(private val firebaseAuthApi: UserApi) : UserRepository 
     ): RepositoryResult<Unit> = try {
         RepositoryResult.Success(firebaseAuthApi.updateEmail(email))
     } catch (e: Exception) {
+        Log.e(TAG, "updateProfileEmailByFirebase: ", e)
         RepositoryResult.Error(getRepositoryException(e))
     }
 
@@ -114,5 +131,9 @@ class UserRepositoryImpl(private val firebaseAuthApi: UserApi) : UserRepository 
      */
     private enum class ActionType {
         LOGIN, REGISTRATION
+    }
+
+    companion object {
+        private val TAG = UserRepositoryImpl::class.java.canonicalName
     }
 }

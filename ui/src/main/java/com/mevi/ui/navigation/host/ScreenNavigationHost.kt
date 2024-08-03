@@ -88,6 +88,7 @@ fun ScreenNavigationHost(
             updateAppBarsVisibility(false)
             val viewModel: AuthorizationViewModel = it.sharedViewModel<AuthorizationViewModel>(navigationComponent.getScreenNavController())
             val loginAction = remember { viewModel::login }
+            val loginByGoogleAction = remember { viewModel::loginByGoogle }
             val registrationAction = remember { viewModel::register }
             val forgotPasswordAction = remember {
                 { navigationComponent.navigate(Route.Startup.ROUTE_FORGOT_PASSWORD) }
@@ -97,6 +98,7 @@ fun ScreenNavigationHost(
             }
             AuthorizationScreen(
                 viewModel.loginState,
+                loginByGoogleAction,
                 loginAction,
                 viewModel.registrationState,
                 registrationAction,

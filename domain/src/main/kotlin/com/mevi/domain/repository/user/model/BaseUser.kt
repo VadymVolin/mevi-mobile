@@ -11,7 +11,7 @@ package com.mevi.domain.repository.user.model
 interface BaseUser {
     val email: String?
     val phoneNumber: String?
-    val tenantId: String?
+    val providerId: String?
     val name: String?
     val isEmailVerified: Boolean
     val photoUrl: String?

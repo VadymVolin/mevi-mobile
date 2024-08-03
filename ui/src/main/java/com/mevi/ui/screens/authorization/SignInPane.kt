@@ -1,5 +1,6 @@
 package com.mevi.ui.screens.authorization
 
+import android.content.Context
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -25,6 +26,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
@@ -45,6 +47,7 @@ fun SignInPane(
     onPasswordValueChange: (String) -> Unit,
     loginState: UIScreenState<MeviUser>,
     loginAction: (Pair<String, String>) -> Unit,
+    loginByGoogleAction: (context: Context) -> Unit,
     forgotPasswordAction: () -> Unit,
     isButtonEnabled: Boolean,
     onAuthenticated: () -> Unit
@@ -58,6 +61,7 @@ fun SignInPane(
     val passwordErrorStringId = remember(loginState.error) {
         mutableIntStateOf(loginState.error?.let { getErrorText(FieldType.PASSWORD, it) } ?: 0)
     }
+    val context = LocalContext.current
     Column(
         modifier = Modifier
             .padding(horizontal = 16.dp)
@@ -127,7 +131,9 @@ fun SignInPane(
                         color = MaterialTheme.colorScheme.secondaryContainer,
                         shape = RoundedCornerShape(8.dp)
                     ),
-                    onClick = { /*TODO*/ },
+                    onClick = {
+                        loginByGoogleAction(context)
+                    },
                     icon = R.drawable.ic_google,
                     iconColor = Color.Unspecified
                 )

@@ -22,7 +22,6 @@ interface UserRepository {
      */
     suspend fun registerByFirebase(credentials: Pair<String, String>): RepositoryResult<BaseUser>
 
-
     /**
      * Login to user account
      *
@@ -31,6 +30,11 @@ interface UserRepository {
      * and [Pair.second] is a password
      */
     suspend fun loginByFirebase(credentials: Pair<String, String>): RepositoryResult<BaseUser>
+
+    /**
+     * Login to user account with Google + Firebase
+     */
+    suspend fun loginByGoogleFirebase(googleIdToken: String?): RepositoryResult<BaseUser>
 
     /**
      * Logs out user
