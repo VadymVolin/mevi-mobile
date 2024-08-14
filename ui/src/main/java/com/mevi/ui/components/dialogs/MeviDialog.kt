@@ -31,23 +31,21 @@ fun MeviDialog(
     onDismissRequest: () -> Unit,
     content: @Composable () -> Unit
 ) {
-//    android:windowSoftInputMode="adjustResize"
-//    val density = LocalDensity.current
-//    val imeInsets = WindowInsets.ime
-//    val imeHeightDp by remember {
-//        derivedStateOf {
-//            with(density) { imeInsets.getBottom(density).toDp() }
-//        }
-//    }
+    val density = LocalDensity.current
+    val imeInsets = WindowInsets.ime
+    val imeHeightDp by remember {
+        derivedStateOf {
+            with(density) { imeInsets.getBottom(density).toDp() }
+        }
+    }
 
     BasicAlertDialog(
         modifier = Modifier
             .clip(RoundedCornerShape(12.dp))
             .imePadding()
-//            .then(
-//                if (android.os.Build.VERSION.SDK_INT < 31) Modifier.padding(bottom = imeHeightDp * 0.85f) else Modifier
-//            )
-        ,
+            .then(
+                if (android.os.Build.VERSION.SDK_INT < 31) Modifier.padding(bottom = imeHeightDp * 0.85f) else Modifier
+            ),
         onDismissRequest = { onDismissRequest() },
         properties = DialogProperties(
             usePlatformDefaultWidth = false,
@@ -56,6 +54,7 @@ fun MeviDialog(
     ) {
         val dialogWindowProvider = LocalView.current.parent as? DialogWindowProvider
         dialogWindowProvider?.window?.setGravity(dialogGravity)
+        dialogWindowProvider?.window?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN)
         Surface(
             modifier = Modifier
                 .padding(16.dp)
